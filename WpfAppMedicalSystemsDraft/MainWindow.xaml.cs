@@ -27,7 +27,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public bool IsLogged { get; set; }
+        public bool IsLogged { get; set; } = false;
         public MainWindow()
         {
             var settings = ReadSettings();
@@ -36,9 +36,9 @@ namespace WpfAppMedicalSystemsDraft
                 MessageBox.Show("Error: Cannot load settings!");
                 Application.Current.Shutdown();
             }
-            MessageBox.Show(settings?.ConnectionString);
+            //MessageBox.Show(settings?.ConnectionString);
             InitializeComponent();
-            
+            DataContext = this;
         }
 
         private static AppSettings? ReadSettings()
