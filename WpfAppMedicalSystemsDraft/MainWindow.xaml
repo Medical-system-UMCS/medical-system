@@ -8,7 +8,33 @@
         Title="MainWindow" Height="494" Width="800">
     <Grid>
         <Menu>
-            <MenuItem Header="Item"></MenuItem>
+            <MenuItem Header="Menu">
+                <MenuItem Header="Zarejestruj się"/>
+                <MenuItem Header="Zaloguj się"/>
+                <MenuItem Header="Wyjdź"/>
+            </MenuItem>
+            <MenuItem Header="Lekarze">
+                <MenuItem.Style>
+                    <Style TargetType="MenuItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLogged}" Value="false">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.Style>
+            </MenuItem>
+            <MenuItem Header="Wizyty">
+                <MenuItem.Style>
+                    <Style TargetType="MenuItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLogged}" Value="false">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.Style>
+            </MenuItem>
         </Menu>
 
     </Grid>

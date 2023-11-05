@@ -27,6 +27,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
+        public bool IsLogged { get; set; }
         public MainWindow()
         {
             var settings = ReadSettings();
@@ -35,7 +36,7 @@ namespace WpfAppMedicalSystemsDraft
                 MessageBox.Show("Error: Cannot load settings!");
                 Application.Current.Shutdown();
             }
-            Console.WriteLine(settings?.ConnectionString);
+            MessageBox.Show(settings?.ConnectionString);
             InitializeComponent();
             
         }
@@ -44,6 +45,7 @@ namespace WpfAppMedicalSystemsDraft
         {
             string filePath = "data.bin";
             string? connectionString;
+
             if (File.Exists(filePath))
             {
  
