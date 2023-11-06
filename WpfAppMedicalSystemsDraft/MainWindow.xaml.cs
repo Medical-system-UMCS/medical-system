@@ -15,12 +15,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfAppMedicalSystemsDraft.Models;
 
 namespace WpfAppMedicalSystemsDraft
 {
     class AppSettings
     {
-        public string? ConnectionString{ get; set; }
+        public string ConnectionString{ get; set; }
     }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -28,15 +29,18 @@ namespace WpfAppMedicalSystemsDraft
     public partial class MainWindow : Window
     {
         public bool IsLogged { get; set; } = false;
+        private MedicalSystemsContext medicalSystemsContext;
         public MainWindow()
         {
             var settings = ReadSettings();
-            if (settings?.ConnectionString == null)
+            if (settings == null)
             {
                 MessageBox.Show("Error: Cannot load settings!");
                 Application.Current.Shutdown();
+                return;
             }
             InitializeComponent();
+            medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
             DataContext = this;
         }
 
