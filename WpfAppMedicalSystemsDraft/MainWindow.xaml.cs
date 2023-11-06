@@ -74,8 +74,19 @@ namespace WpfAppMedicalSystemsDraft
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Okno logowania");
+            LoginOverlay.Visibility = Visibility.Visible;
         }
+
+        private void SubmitLogin_Click(object sender, RoutedEventArgs e)
+        {
+            string username = UsernameTextBox.Text;
+            string password = PasswordBox.Password;
+
+            //do something with username and password later
+
+            LoginOverlay.Visibility = Visibility.Collapsed;
+        }
+
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
@@ -96,5 +107,7 @@ namespace WpfAppMedicalSystemsDraft
         {
             Application.Current.Shutdown();
         }
+
+    
     }
 }

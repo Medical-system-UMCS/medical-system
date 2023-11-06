@@ -49,7 +49,7 @@
                         </Style.Triggers>
                     </Style>
                 </MenuItem.Style>
-                <MenuItem Header="Zobacz lekarzów" Click="DoctorsList_Click"/>
+                <MenuItem Header="Zobacz lekarzy" Click="DoctorsList_Click"/>
             </MenuItem>
             <MenuItem Header="Wizyty">
                 <MenuItem.Style>
@@ -64,6 +64,30 @@
                 <MenuItem Header="Umów wizytę" Click="AddAppointment_Click"/>
             </MenuItem>
         </Menu>
+
+        
+        <!-- Login dialog section -->
+        <Grid x:Name="LoginOverlay" Visibility="Collapsed">
+            <Grid>
+                <Grid.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.6"/>
+                </Grid.Background>
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="350" >
+                    <Border BorderBrush="LightGray" BorderThickness="2" Background="White" CornerRadius="5">
+                        <Grid Margin="20">
+                            <StackPanel>
+                                <TextBlock Text="Login" FontSize="20" HorizontalAlignment="Center" Margin="0 0 0 10"/>
+                                <TextBlock Text="Username:"/>
+                                <TextBox x:Name="UsernameTextBox" Margin="0 0 0 10" Padding="5"/>
+                                <TextBlock Text="Password:"/>
+                                <PasswordBox x:Name="PasswordBox" Margin="0 0 0 10" Padding="5"/>
+                                <Button Content="Login" Click="SubmitLogin_Click" HorizontalAlignment="Center" Width="80" Padding="5" Background="#2196F3" Foreground="White"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
 
     </Grid>
 </Window>
