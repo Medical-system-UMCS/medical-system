@@ -36,7 +36,6 @@ namespace WpfAppMedicalSystemsDraft
                 MessageBox.Show("Error: Cannot load settings!");
                 Application.Current.Shutdown();
             }
-            //MessageBox.Show(settings?.ConnectionString);
             InitializeComponent();
             DataContext = this;
         }
@@ -67,6 +66,31 @@ namespace WpfAppMedicalSystemsDraft
                 return null;
             }
             return new AppSettings{ConnectionString = connectionString};
+        }
+
+        private void Login_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Okno logowania");
+        }
+
+        private void Register_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Okno rejestracji");
+        }
+
+        private void DoctorsList_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Lista lekarzów");
+        }
+
+        private void AddAppointment_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Umów się na wizytę");
+        }
+
+        private void ExitApp_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

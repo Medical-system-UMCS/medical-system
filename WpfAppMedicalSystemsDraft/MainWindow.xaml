@@ -9,9 +9,35 @@
     <Grid>
         <Menu>
             <MenuItem Header="Menu">
-                <MenuItem Header="Zarejestruj się"/>
-                <MenuItem Header="Zaloguj się"/>
-                <MenuItem Header="Wyjdź"/>
+                <MenuItem Header="Zarejestruj się" Click="Register_Click">
+                    <MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLogged}" Value="false">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsLogged}" Value="true">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+                <MenuItem Header="Zaloguj się" Click="Login_Click">
+                    <MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLogged}" Value="false">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsLogged}" Value="true">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+                <MenuItem Header="Wyjdź" Click="ExitApp_Click"/>
             </MenuItem>
             <MenuItem Header="Lekarze">
                 <MenuItem.Style>
@@ -23,6 +49,7 @@
                         </Style.Triggers>
                     </Style>
                 </MenuItem.Style>
+                <MenuItem Header="Zobacz lekarzów" Click="DoctorsList_Click"/>
             </MenuItem>
             <MenuItem Header="Wizyty">
                 <MenuItem.Style>
@@ -34,6 +61,7 @@
                         </Style.Triggers>
                     </Style>
                 </MenuItem.Style>
+                <MenuItem Header="Umów wizytę" Click="AddAppointment_Click"/>
             </MenuItem>
         </Menu>
 
