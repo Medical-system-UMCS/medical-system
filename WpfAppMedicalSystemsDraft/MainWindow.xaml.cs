@@ -21,7 +21,7 @@ namespace WpfAppMedicalSystemsDraft
 {
     class AppSettings
     {
-        public string ConnectionString{ get; set; }
+        public string ConnectionString { get; set; }
     }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -51,7 +51,7 @@ namespace WpfAppMedicalSystemsDraft
 
             if (File.Exists(filePath))
             {
- 
+
                 FileStream fs1 = new FileStream(filePath, FileMode.Open);
                 BinaryReader br = new BinaryReader(fs1);
                 try
@@ -69,13 +69,24 @@ namespace WpfAppMedicalSystemsDraft
             {
                 return null;
             }
-            return new AppSettings{ConnectionString = connectionString};
+            return new AppSettings { ConnectionString = connectionString };
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Okno logowania");
+            LoginOverlay.Visibility = Visibility.Visible;
         }
+
+        private void SubmitLogin_Click(object sender, RoutedEventArgs e)
+        {
+            string username = UsernameTextBox.Text;
+            string password = PasswordBox.Password;
+
+            //do something with username and password later
+
+            LoginOverlay.Visibility = Visibility.Collapsed;
+        }
+
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
@@ -84,7 +95,7 @@ namespace WpfAppMedicalSystemsDraft
 
         private void DoctorsList_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Lista lekarzów");
+            MessageBox.Show("Lista lekarzy");
         }
 
         private void AddAppointment_Click(object sender, RoutedEventArgs e)
@@ -96,5 +107,7 @@ namespace WpfAppMedicalSystemsDraft
         {
             Application.Current.Shutdown();
         }
+
+    
     }
 }
