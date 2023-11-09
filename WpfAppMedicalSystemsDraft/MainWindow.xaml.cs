@@ -77,9 +77,33 @@ namespace WpfAppMedicalSystemsDraft
             MessageBox.Show("Okno logowania");
         }
 
+        private void SubmitRegister_Click(object sender, RoutedEventArgs e)
+        {
+            string email = EmailTextBox.Text;
+            string password = PasswordBox.Password;
+            string repeatpassword = RepeatPasswordBox.Password;
+            string firstname = FirstNameTextBox.Text;
+            string lastname = LastNameTextBox.Text;
+            string dateofbirth = DateOfBirthTextBox.Text;
+            string accounttype;
+
+
+            void Button_Click(object sender, RoutedEventArgs e)
+            {
+                if (PatientButton.IsChecked == true) accounttype = PatientButton.Content.ToString();
+                else if (DoctorButton.IsChecked == true) accounttype = DoctorButton.Content.ToString();
+            }
+
+            //do something with variables later
+
+
+
+            RegisterOverlay.Visibility = Visibility.Collapsed;
+        }
+
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Okno rejestracji");
+            RegisterOverlay.Visibility = Visibility.Visible;
         }
 
         private void DoctorsList_Click(object sender, RoutedEventArgs e)
