@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfAppMedicalSystemsDraft.Enums;
 using WpfAppMedicalSystemsDraft.Models;
 
 namespace WpfAppMedicalSystemsDraft
@@ -28,7 +29,8 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public bool IsLogged { get; set; } = false;
+        public bool IsLogged { get; set; } = true;
+        public string AccountTypeEnum { get; set; } = AccountType.NOT_LOGGED;
         private MedicalSystemsContext medicalSystemsContext;
         public MainWindow()
         {

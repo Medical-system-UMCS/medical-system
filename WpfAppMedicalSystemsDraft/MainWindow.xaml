@@ -63,6 +63,23 @@
                 </MenuItem.Style>
                 <MenuItem Header="Umów wizytę" Click="AddAppointment_Click"/>
             </MenuItem>
+            <MenuItem Header="Zarządzanie platformą">
+                <MenuItem.Style>
+                    <Style TargetType="MenuItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="PACIENT">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="DOCTOR">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="NOT_LOGGED">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.Style>
+            </MenuItem>
         </Menu>
 
 
