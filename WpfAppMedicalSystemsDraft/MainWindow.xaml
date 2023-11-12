@@ -121,7 +121,7 @@
                 <MenuItem Header="Dodaj wyniki badań"/>
             </MenuItem>
 
-            <MenuItem Header="Zarządzanie platformą">
+            <MenuItem Header="Zarządzanie platformą" x:Name="ManageControl">
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
