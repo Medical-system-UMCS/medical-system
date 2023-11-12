@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfAppMedicalSystemsDraft.Enums;
 using WpfAppMedicalSystemsDraft.Models;
 
 namespace WpfAppMedicalSystemsDraft
@@ -28,7 +30,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public bool IsLogged { get; set; } = false;
+        public string AccountTypeEnum { get; set; } = AccountType.DOCTOR;
         private MedicalSystemsContext medicalSystemsContext;
         public MainWindow()
         {
@@ -40,6 +42,7 @@ namespace WpfAppMedicalSystemsDraft
                 return;
             }
             InitializeComponent();
+            LoginControl.OnSubmitLogin += LoginControlOnSubmit;
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
             DataContext = this;
         }
@@ -97,6 +100,9 @@ namespace WpfAppMedicalSystemsDraft
             Application.Current.Shutdown();
         }
 
-    
+        private void LoginControlOnSubmit(string username, string password)
+        {          
+            LoginControl.Visibility = Visibility.Hidden;
+        }
     }
 }

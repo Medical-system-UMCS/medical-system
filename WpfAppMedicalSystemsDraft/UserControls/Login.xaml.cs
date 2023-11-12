@@ -32,7 +32,10 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
             //do something with username and password later
 
-            LoginOverlay.Visibility = Visibility.Collapsed;
+            OnSubmitLogin.Invoke(username, password);
+
         }
+
+        public event Action<string, string> OnSubmitLogin;
     }
 }
