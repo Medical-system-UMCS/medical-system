@@ -29,7 +29,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public bool IsLogged { get; set; } = true;
+        public bool IsLogged { get; set; } = false;
         public string AccountTypeEnum { get; set; } = AccountType.NOT_LOGGED;
         private MedicalSystemsContext medicalSystemsContext;
         public MainWindow()
@@ -42,6 +42,7 @@ namespace WpfAppMedicalSystemsDraft
                 return;
             }
             InitializeComponent();
+            LoginControl.OnSubmitLogin += LoginControlOnSubmit;
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
             DataContext = this;
         }
@@ -99,6 +100,10 @@ namespace WpfAppMedicalSystemsDraft
             Application.Current.Shutdown();
         }
 
-    
+        private void LoginControlOnSubmit(string username, string password)
+        {
+            MessageBox.Show($"Login {username} {password}");
+            LoginControl.Visibility = Visibility.Hidden;
+        }
     }
 }
