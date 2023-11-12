@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfAppMedicalSystemsDraft"
+        xmlns:controls="clr-namespace:WpfAppMedicalSystemsDraft.UserControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="494" Width="800">
+
     <Grid>
         <Menu>
             <MenuItem Header="Menu">
@@ -82,74 +84,7 @@
             </MenuItem>
         </Menu>
 
-
-        <!-- Login dialog section -->
-        <Grid x:Name="LoginOverlay" Visibility="Collapsed">
-            <Grid.Background>
-                <SolidColorBrush Color="Black" Opacity="0.6"/>
-            </Grid.Background>
-            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="350" >
-                <Border BorderBrush="LightGray" BorderThickness="2" Background="White" CornerRadius="5">
-                    <Grid Margin="20">
-                        <StackPanel>
-                            <TextBlock Text="Login" FontSize="20" HorizontalAlignment="Center" Margin="0 0 0 10"/>
-
-                            <TextBlock Text="Username:"/>
-                            <TextBox x:Name="UsernameTextBox" Margin="0 0 0 10" Padding="5">
-                                <TextBox.Resources>
-                                    <Style TargetType="{x:Type Border}">
-                                        <Setter Property="CornerRadius" Value="5"/>
-                                    </Style>
-                                </TextBox.Resources>
-                            </TextBox>
-
-                            <TextBlock Text="Password:"/>
-                            <PasswordBox x:Name="PasswordBox" Margin="0 0 0 10" Padding="5">
-                                <PasswordBox.Style>
-                                    <Style TargetType="{x:Type PasswordBox}">
-                                        <Style.Resources>
-                                            <Style TargetType="Border">
-                                                <Setter Property="CornerRadius" Value="5" />
-                                            </Style>
-                                        </Style.Resources>
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type PasswordBox}">
-                                                    <Border x:Name="border" CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                                                        <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
-                                                    </Border>
-                                                    <ControlTemplate.Triggers>
-                                                        <Trigger Property="IsEnabled" Value="false">
-                                                            <Setter Property="Opacity" TargetName="border" Value="0.56"/>
-                                                        </Trigger>
-                                                        <Trigger Property="IsMouseOver" Value="true">
-                                                            <Setter Property="BorderBrush" TargetName="border" Value="#FF7EB4EA"/>
-                                                        </Trigger>
-                                                        <Trigger Property="IsKeyboardFocused" Value="true">
-                                                            <Setter Property="BorderBrush" TargetName="border" Value="#FF569DE5"/>
-                                                        </Trigger>
-                                                    </ControlTemplate.Triggers>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <MultiTrigger>
-                                                <MultiTrigger.Conditions>
-                                                    <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
-                                                    <Condition Property="IsSelectionActive" Value="false"/>
-                                                </MultiTrigger.Conditions>
-                                                <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                                            </MultiTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </PasswordBox.Style>
-                            </PasswordBox>
-                            <Button Content="Login" Click="SubmitLogin_Click" HorizontalAlignment="Center" Width="80" Padding="5" Background="#2196F3" Foreground="White"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-            </Grid>
-        </Grid>
+        <controls:Login x:Name="LoginControl" Visibility="Collapsed"/>
 
     </Grid>
 </Window>
