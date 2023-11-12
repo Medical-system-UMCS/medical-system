@@ -15,11 +15,17 @@
                     <MenuItem.Style>
                         <Style TargetType="MenuItem">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsLogged}" Value="false">
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsLogged}" Value="true">
+                                <DataTrigger Binding="{Binding AccountTypeEnum}" Value="PACIENT">
                                     <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AccountTypeEnum}" Value="DOCTOR">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AccountTypeEnum}" Value="ADMIN">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AccountTypeEnum}" Value="NOT_LOGGED">
+                                    <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -29,10 +35,24 @@
                     <MenuItem.Style>
                         <Style TargetType="MenuItem">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsLogged}" Value="false">
-                                    <Setter Property="Visibility" Value="Visible" />
+                                <DataTrigger Binding="{Binding AccountTypeEnum}" Value="PACIENT">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsLogged}" Value="true">
+                                <DataTrigger Binding="{Binding AccountTypeEnum}" Value="DOCTOR">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AccountTypeEnum}" Value="ADMIN">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+                <MenuItem Header="Wyloguj się">
+                    <MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AccountTypeEnum}" Value="NOT_LOGGED">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -45,7 +65,16 @@
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLogged}" Value="false">
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="PACIENT">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="DOCTOR">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="ADMIN">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="NOT_LOGGED">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -57,14 +86,41 @@
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsLogged}" Value="false">
-                                <Setter Property="Visibility" Value="Collapsed" />
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="DOCTOR">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="ADMIN">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="NOT_LOGGED">
+                                <Setter Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </MenuItem.Style>
                 <MenuItem Header="Umów wizytę" Click="AddAppointment_Click"/>
+                <MenuItem Header="Historia wizyt"/>
+                <MenuItem Header="Wyniki badań"/>
             </MenuItem>
+            <MenuItem Header="Zarządzanie badaniami">
+                <MenuItem.Style>
+                    <Style TargetType="MenuItem">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="ADMIN">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="PACIENT">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AccountTypeEnum}" Value="NOT_LOGGED">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.Style>
+                <MenuItem Header="Dodaj wyniki badań"/>
+            </MenuItem>
+
             <MenuItem Header="Zarządzanie platformą">
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
@@ -81,6 +137,8 @@
                         </Style.Triggers>
                     </Style>
                 </MenuItem.Style>
+                <MenuItem Header="Potwierdź lekarza"/>
+                <MenuItem Header="Zarządzaj użytkownikami"/>
             </MenuItem>
         </Menu>
 

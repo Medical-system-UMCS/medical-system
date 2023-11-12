@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -29,8 +30,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public bool IsLogged { get; set; } = false;
-        public string AccountTypeEnum { get; set; } = AccountType.NOT_LOGGED;
+        public string AccountTypeEnum { get; set; } = AccountType.DOCTOR;
         private MedicalSystemsContext medicalSystemsContext;
         public MainWindow()
         {
@@ -101,8 +101,7 @@ namespace WpfAppMedicalSystemsDraft
         }
 
         private void LoginControlOnSubmit(string username, string password)
-        {
-            MessageBox.Show($"Login {username} {password}");
+        {          
             LoginControl.Visibility = Visibility.Hidden;
         }
     }
