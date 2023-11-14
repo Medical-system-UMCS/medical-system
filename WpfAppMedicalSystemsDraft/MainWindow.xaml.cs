@@ -31,7 +31,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string AccountTypeEnum { get; set; } = AccountType.NOT_LOGGED;
+        public string AccountTypeEnum { get; set; } = AccountType.DOCTOR;
         private MedicalSystemsContext medicalSystemsContext;
         public MainWindow()
         {
@@ -123,11 +123,30 @@ namespace WpfAppMedicalSystemsDraft
             }
             AccountTypeEnum = user.AccountType;
             LoginControl.Visibility = Visibility.Hidden;
-            //do zrobienia pozostałych warunków
+
             if (AccountTypeEnum.Equals(AccountType.ADMIN))
             {
                 ManageControl.Visibility = Visibility.Visible;
-            }          
+                Register.Visibility = Visibility.Collapsed;
+                LogIn.Visibility = Visibility.Collapsed;
+                LogOut.Visibility = Visibility.Visible;
+            }
+            if (AccountTypeEnum.Equals(AccountType.PACIENT))
+            {
+                Appointments.Visibility = Visibility.Visible;
+                Doctors.Visibility = Visibility.Visible;
+                Register.Visibility = Visibility.Collapsed;
+                LogIn.Visibility = Visibility.Collapsed;
+                LogOut.Visibility = Visibility.Visible;
+            }
+            if (AccountTypeEnum.Equals(AccountType.DOCTOR))
+            {
+                Doctors.Visibility = Visibility.Visible;
+                ManageExaminations.Visibility = Visibility.Visible;
+                Register.Visibility = Visibility.Collapsed;                        
+                LogIn.Visibility = Visibility.Collapsed;
+                LogOut.Visibility = Visibility.Visible;
+            }
         }
     }
 }
