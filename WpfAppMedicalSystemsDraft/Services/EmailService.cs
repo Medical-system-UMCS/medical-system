@@ -24,7 +24,10 @@ namespace WpfAppMedicalSystemsDraft.Services
         public void SendEmail(string email, string name)
         {
             SendSmtpEmailSender emailSender = new(senderName, senderEmail);
-            JObject Headers = new();
+            JObject Headers = new()
+            {
+                { "", ""}
+            };
             SendSmtpEmailTo smtpEmailTo = new(email, name);
             List<SendSmtpEmailTo> To = new()
             {
