@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -101,8 +102,51 @@ namespace WpfAppMedicalSystemsDraft
         }
 
         private void LoginControlOnSubmit(string username, string password)
-        {          
+        {
+            User? user = medicalSystemsContext.Users.FirstOrDefault(user => user.Login.Equals(username));
+            if (user == null)
+            {
+                MessageBox.Show("Użytkownik nie został znaleziony!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                LoginControl.Visibility = Visibility.Hidden;
+                return;
+            }
+            using (SHA256 sHA256 = SHA256.Create())
+            {
+                byte[] inputBytes = sHA256.ComputeHash(Encoding.UTF8.GetBytes(password));                
+                string computedHash = BitConverter.ToString(inputBytes).Replace("-", string.Empty).ToLower();
+                if (computedHash != user.Password)
+                {
+                    MessageBox.Show("Użytkownik nie został znaleziony!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    LoginControl.Visibility = Visibility.Hidden;
+                    return;
+                }
+            }
+            AccountTypeEnum = user.AccountType;
             LoginControl.Visibility = Visibility.Hidden;
+
+            if (AccountTypeEnum.Equals(AccountType.ADMIN))
+            {
+                ManageControl.Visibility = Visibility.Visible;
+                Register.Visibility = Visibility.Collapsed;
+                LogIn.Visibility = Visibility.Collapsed;
+                LogOut.Visibility = Visibility.Visible;
+            }
+            if (AccountTypeEnum.Equals(AccountType.PACIENT))
+            {
+                Appointments.Visibility = Visibility.Visible;
+                Doctors.Visibility = Visibility.Visible;
+                Register.Visibility = Visibility.Collapsed;
+                LogIn.Visibility = Visibility.Collapsed;
+                LogOut.Visibility = Visibility.Visible;
+            }
+            if (AccountTypeEnum.Equals(AccountType.DOCTOR))
+            {
+                Doctors.Visibility = Visibility.Visible;
+                ManageExaminations.Visibility = Visibility.Visible;
+                Register.Visibility = Visibility.Collapsed;                        
+                LogIn.Visibility = Visibility.Collapsed;
+                LogOut.Visibility = Visibility.Visible;
+            }
         }
     }
 }

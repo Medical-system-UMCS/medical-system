@@ -11,7 +11,7 @@
     <Grid>
         <Menu>
             <MenuItem Header="Menu">
-                <MenuItem Header="Zarejestruj się" Click="Register_Click">
+                <MenuItem Header="Zarejestruj się" x:Name="Register" Click="Register_Click">
                     <MenuItem.Style>
                         <Style TargetType="MenuItem">
                             <Style.Triggers>
@@ -31,7 +31,7 @@
                         </Style>
                     </MenuItem.Style>
                 </MenuItem>
-                <MenuItem Header="Zaloguj się" Click="Login_Click">
+                <MenuItem Header="Zaloguj się" x:Name="LogIn" Click="Login_Click">
                     <MenuItem.Style>
                         <Style TargetType="MenuItem">
                             <Style.Triggers>
@@ -48,7 +48,7 @@
                         </Style>
                     </MenuItem.Style>
                 </MenuItem>
-                <MenuItem Header="Wyloguj się">
+                <MenuItem Header="Wyloguj się" x:Name="LogOut">
                     <MenuItem.Style>
                         <Style TargetType="MenuItem">
                             <Style.Triggers>
@@ -61,7 +61,7 @@
                 </MenuItem>
                 <MenuItem Header="Wyjdź" Click="ExitApp_Click"/>
             </MenuItem>
-            <MenuItem Header="Lekarze">
+            <MenuItem Header="Lekarze" x:Name="Doctors">
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
@@ -82,7 +82,7 @@
                 </MenuItem.Style>
                 <MenuItem Header="Zobacz lekarzy" Click="DoctorsList_Click"/>
             </MenuItem>
-            <MenuItem Header="Wizyty">
+            <MenuItem Header="Wizyty" x:Name="Appointments">
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
@@ -102,7 +102,7 @@
                 <MenuItem Header="Historia wizyt"/>
                 <MenuItem Header="Wyniki badań"/>
             </MenuItem>
-            <MenuItem Header="Zarządzanie badaniami">
+            <MenuItem Header="Zarządzanie badaniami" x:Name="ManageExaminations">
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
@@ -121,7 +121,7 @@
                 <MenuItem Header="Dodaj wyniki badań"/>
             </MenuItem>
 
-            <MenuItem Header="Zarządzanie platformą">
+            <MenuItem Header="Zarządzanie platformą" x:Name="ManageControl">
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
