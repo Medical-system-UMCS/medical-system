@@ -33,7 +33,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string AccountTypeEnum { get; set; } = AccountType.DOCTOR;
+        public string AccountTypeEnum { get; private set; } = AccountType.NOT_LOGGED;
         private MedicalSystemsContext medicalSystemsContext;
         private EmailService emailService;
         public MainWindow()
@@ -48,7 +48,9 @@ namespace WpfAppMedicalSystemsDraft
             InitializeComponent();
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
-            emailService = new EmailService(settings.SmtpApiKey);            
+            emailService = new EmailService(settings.SmtpApiKey);
+            emailService.SendEmail("aadit.zoltan@forkshape.com", "Aadit Zoltan",
+                EmailType.ACCOUNT_CONFIRMATION, new[] {"aadit_zoltan", "Aadit Zoltan"});
             DataContext = this;
         }
 
