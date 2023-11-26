@@ -21,8 +21,13 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
         private bool typeIsPatient = true;
 
+        public string Email { get; set; }
+        public string Nazwisko { get; set; }
+
         public void SubmitRegister_Click(object sender, RoutedEventArgs e)
         {
+
+            /*
             if(!Regex.IsMatch(FirstNameTextBox.Text, @"^[a-zA-Z]{3,30}$"))
             {
                 MessageBox.Show("Podaj poprawne imie!");
@@ -87,7 +92,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                     RegisterOverlay.Visibility = Visibility.Collapsed;
                 }
             } 
-            
+            */
             
         }
 
@@ -117,6 +122,8 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             AccTypeVar1 = "Waga (kg):";
             AccTypeVar2 = "Wzrost (cm):";
             typeIsPatient = true;
+            DateOfBirthPicker.Visibility = Visibility.Visible;
+            DateOfBirthHeadline.Visibility = Visibility.Visible;
         }
 
         private void DoctorButton_Checked(object sender, RoutedEventArgs e)
@@ -124,6 +131,8 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             AccTypeVar1 = "Stopień naukowy:";
             AccTypeVar2 = "Specjalizacja:";
             typeIsPatient = false;
+            DateOfBirthPicker.Visibility = Visibility.Collapsed;
+            DateOfBirthHeadline.Visibility = Visibility.Collapsed;
         }
 
         private void DateOfBirthPicker_Validation(object sender, DatePickerDateValidationErrorEventArgs e)
