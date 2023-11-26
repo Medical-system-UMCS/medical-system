@@ -33,7 +33,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string AccountTypeEnum { get; private set; } = AccountType.NOT_LOGGED;
+        public string AccountTypeEnum { get; private set; } = AccountType.ADMIN;
         private MedicalSystemsContext medicalSystemsContext;
         private EmailService emailService;
         public MainWindow()
@@ -47,10 +47,12 @@ namespace WpfAppMedicalSystemsDraft
             }
             InitializeComponent();
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
+
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
-            emailService = new EmailService(settings.SmtpApiKey);          
+            emailService = new EmailService(settings.SmtpApiKey);
             DataContext = this;
         }
+
 
         private static AppSettings? ReadSettings()
         {
@@ -112,6 +114,17 @@ namespace WpfAppMedicalSystemsDraft
             MessageBox.Show("Umów się na wizytę");
         }
 
+        private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
+        {
+            ManageControl.AddDoctorOverlay.IsOpen = true;
+            ManageControl.DoctorNameTextBox.Focus();
+        }
+
+        private void ManageUsers_Click(object sender, RoutedEventArgs e)
+        {
+            ManageControl.ManageUsersOverlay.IsOpen = true;
+        }
+
         private void ExitApp_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
@@ -164,5 +177,6 @@ namespace WpfAppMedicalSystemsDraft
                 LogOut.Visibility = Visibility.Visible;
             }
         }
+
     }
 }

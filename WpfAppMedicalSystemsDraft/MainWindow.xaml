@@ -121,7 +121,7 @@
                 <MenuItem Header="Dodaj wyniki badań"/>
             </MenuItem>
 
-            <MenuItem Header="Zarządzanie platformą" x:Name="ManageControl">
+            <MenuItem Header="Zarządzanie platformą">
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
@@ -137,12 +137,13 @@
                         </Style.Triggers>
                     </Style>
                 </MenuItem.Style>
-                <MenuItem Header="Potwierdź lekarza"/>
-                <MenuItem Header="Zarządzaj użytkownikami"/>
+                <MenuItem Header="Potwierdź lekarza" x:Name="ApproveDoctor" Click="ConfirmDoctor_Click"/>
+                <MenuItem Header="Zarządzaj użytkownikami" x:Name="ManageUsers" Click="ManageUsers_Click"/>
             </MenuItem>
         </Menu>
 
         <controls:Login x:Name="LoginControl" Visibility="Collapsed"/>
-
+        <controls:ManageControl x:Name="ManageControl"/>
+       
     </Grid>
 </Window>
