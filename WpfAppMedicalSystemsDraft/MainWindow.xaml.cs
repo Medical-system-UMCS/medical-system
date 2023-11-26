@@ -48,9 +48,7 @@ namespace WpfAppMedicalSystemsDraft
             InitializeComponent();
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
-            emailService = new EmailService(settings.SmtpApiKey);
-            emailService.SendEmail("aadit.zoltan@forkshape.com", "Aadit Zoltan",
-                EmailType.ACCOUNT_CONFIRMATION, new[] {"aadit_zoltan", "Aadit Zoltan"});
+            emailService = new EmailService(settings.SmtpApiKey);          
             DataContext = this;
         }
 
