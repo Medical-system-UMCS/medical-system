@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,12 @@ namespace WpfAppMedicalSystemsDraft.Services
                                 <p>Z poważaniem,<br>
                                 Administrator systemu medycznego MFII</p>                
                             </body>
-                        </html>"
+                        </html>",
+                Params = new()
+                {
+                    { ParamType.LOGIN, "" },
+                    { ParamType.FULL_NAME, "" }
+                }
             });
 
             // Dodanie kolejnych wzorców

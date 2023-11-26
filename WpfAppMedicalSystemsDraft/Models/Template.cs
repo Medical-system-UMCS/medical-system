@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,6 @@ namespace WpfAppMedicalSystemsDraft.Models
     {
         public string Header { get; set; }
         public string Content { get; set; }
+        public JObject Params { get; set; }
     }
 }

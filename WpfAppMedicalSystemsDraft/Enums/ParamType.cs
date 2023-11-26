@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace WpfAppMedicalSystemsDraft.Enums
 {
-    class EmailType
+    class ParamType
     {
-        public const string ACCOUNT_CONFIRMATION = "ACCOUNT_CONFIRMATION";
+        public const string LOGIN = "login";
+        public const string FULL_NAME = "full_name";
     }
 }

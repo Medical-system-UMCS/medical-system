@@ -25,12 +25,12 @@ namespace WpfAppMedicalSystemsDraft.Services
             senderEmail = "medical.system.mfii@proton.me";
         }
 
-        public void SendEmail(string email, string name, string emailType)
+        public void SendEmail(string email, string name, string emailType, params string[] paramValues)
         {
             SendSmtpEmailSender emailSender = new(senderName, senderEmail);
             JObject Headers = new()
             {
-                { "", ""}
+                { "content-type", "text/html"}
             };
             SendSmtpEmailTo smtpEmailTo = new(email, name);
             List<SendSmtpEmailTo> To = new()
@@ -45,13 +45,16 @@ namespace WpfAppMedicalSystemsDraft.Services
             string htmlContent = template.Content;
             string? TextContent = null;
             string Subject = template.Header;
-
-            long? TemplateId = null;
-            // zamienić parametry w zależności od wzorców
-            JObject Params = new()
+            
+            JObject Params = template.Params;
+            int i = 0;
+            foreach (var param in Params)
             {
-                { "login", "admin" }
-            };
+                string key = param.Key;
+                Params[key] = paramValues[i];
+                i++;
+            }
+
             SendSmtpEmailTo1 smtpEmailTo1 = new(email, name);
             List<SendSmtpEmailTo1> sendList = new()
             {
@@ -70,7 +73,7 @@ namespace WpfAppMedicalSystemsDraft.Services
             try
             {
                 var sendSmtpEmail = new SendSmtpEmail(emailSender, To, null, null, htmlContent, TextContent, Subject, null,
-                    null, Headers, TemplateId, Params, messageVersiopns, null);
+                    null, Headers, null, Params, messageVersiopns, null);
 
                 CreateSmtpEmail result = apiIstance.SendTransacEmail(sendSmtpEmail);              
             }
