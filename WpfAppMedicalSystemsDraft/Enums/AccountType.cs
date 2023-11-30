@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace WpfAppMedicalSystemsDraft.Enums
 {
     class AccountType
@@ -6,5 +8,7 @@ namespace WpfAppMedicalSystemsDraft.Enums
         public static readonly string PACIENT = "PACIENT";
         public static readonly string ADMIN = "ADMIN";
         public static readonly string NOT_LOGGED = "NOT_LOGGED";
+
+        public static List<string> Values => new() { DOCTOR, PACIENT, ADMIN, NOT_LOGGED };
     }
 }

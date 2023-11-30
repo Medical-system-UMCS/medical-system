@@ -19,9 +19,9 @@ namespace WpfAppMedicalSystemsDraft.UserControls
     /// <summary>
     /// Interaction logic for ManageControl.xaml
     /// </summary>
-    public partial class ManageControl : UserControl
+    public partial class ApproveDoctors : UserControl
     {
-        public ManageControl()
+        public ApproveDoctors()
         {
             InitializeComponent();
         }
@@ -34,14 +34,10 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
         private void CancelAddDoctor_Click(object sender, RoutedEventArgs e)
         {
-            DoctorNameTextBox.Text = String.Empty;
+            FirstName.Text = String.Empty;
+            LastName.Text = String.Empty;
             SpecializationTextBox.Text = String.Empty;
             AddDoctorOverlay.IsOpen = false;
-        }
-
-        private void CloseManageUsers_Click(object sender, RoutedEventArgs e)
-        {
-            ManageUsersOverlay.IsOpen = false;
         }
     }
 }

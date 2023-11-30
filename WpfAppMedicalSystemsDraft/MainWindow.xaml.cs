@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Intrinsics.Arm;
@@ -45,14 +46,23 @@ namespace WpfAppMedicalSystemsDraft
                 Application.Current.Shutdown();
                 return;
             }
+
+           
             InitializeComponent();
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
+           
 
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
             emailService = new EmailService(settings.SmtpApiKey);
             DataContext = this;
         }
 
+
+        private void UserControlUsers_CloseClicked(object sender, EventArgs e)
+        {
+            // Handle the close logic here
+            Close();
+        }
 
         private static AppSettings? ReadSettings()
         {
@@ -116,13 +126,15 @@ namespace WpfAppMedicalSystemsDraft
 
         private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
         {
-            ManageControl.AddDoctorOverlay.IsOpen = true;
-            ManageControl.DoctorNameTextBox.Focus();
+            ApproveDoctorsControl.AddDoctorOverlay.IsOpen = true;
+            ApproveDoctorsControl.FirstName.Focus();
         }
 
         private void ManageUsers_Click(object sender, RoutedEventArgs e)
         {
-            ManageControl.ManageUsersOverlay.IsOpen = true;
+            ManageUsersControl.ManageUsersOverlay.IsOpen = true;
+
+        
         }
 
         private void ExitApp_Click(object sender, RoutedEventArgs e)
