@@ -24,10 +24,13 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         public string Email { get; set; }
         public string Nazwisko { get; set; }
 
+        public string SelectedDate { get; set; }
+
+
+
         public void SubmitRegister_Click(object sender, RoutedEventArgs e)
         {
 
-            /*
             if(!Regex.IsMatch(FirstNameTextBox.Text, @"^[a-zA-Z]{3,30}$"))
             {
                 MessageBox.Show("Podaj poprawne imie!");
@@ -43,21 +46,22 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                 MessageBox.Show("Podaj poprawny email!");
                 EmailTextBox.Focus();
             }
-            else if (DateOfBirthPicker.SelectedDate == null)
+            if (DateOfBirthPicker.SelectedDate == null)
             {
                 MessageBox.Show("Podaj datę!");
                 DateOfBirthPicker.Focus();
-            }
+            }   
             else if (!Regex.IsMatch(PasswordBox.Password, @"^[a-zA-Z0-9!@#$%^&]{6,32}$"))
             {
                 MessageBox.Show("Podaj poprawne hasło!");
+                //PasswordBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 PasswordBox.Focus();
             }
             else if (PasswordBox.Password != RepeatPasswordBox.Password)
             {
                 MessageBox.Show("Hasła muszą być jednakowe!");
                 RepeatPasswordBox.Focus();
-            }
+            } 
             else if (typeIsPatient)
             {
                 if (!Regex.IsMatch(TypeTextBox1.Text, @"^[0-9]{2,3}$"))
@@ -92,8 +96,8 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                     RegisterOverlay.Visibility = Visibility.Collapsed;
                 }
             } 
-            */
             
+
         }
 
 

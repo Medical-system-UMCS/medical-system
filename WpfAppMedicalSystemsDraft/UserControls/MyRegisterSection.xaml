@@ -118,11 +118,28 @@
 
                         <TextBlock x:Name="DateOfBirthHeadline" Text="Data urodzenia:" Grid.Row="7" Margin="0 7 0 0"/>
                         <DatePicker x:Name="DateOfBirthPicker" Grid.Row="8" Margin="0 0 0 10" Padding="5" DateValidationError="DateOfBirthPicker_Validation" DisplayDateEnd="{x:Static sys:DateTime.Today}" DisplayDate="01/01/00">
+                            <DatePicker.SelectedDate>
+                                <Binding ElementName="dateProvider" Path="SelectedDate" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <local:DatePickerValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </DatePicker.SelectedDate>
                             <DatePicker.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="5"/>
                                 </Style>
                             </DatePicker.Resources>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel >
+                                        <Border BorderBrush="Red" BorderThickness="1" CornerRadius="6">
+                                            <AdornedElementPlaceholder />
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" FontSize="10" HorizontalAlignment="Right" Margin="0 0 5 0"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
                         </DatePicker>
 
                         <TextBlock Text="Hasło:" Grid.Row="1" Grid.Column="1" Margin="55 0 0 0"/>
@@ -212,20 +229,50 @@
 
                         <TextBlock Text="{Binding Path=AccTypeVar1, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="5" Margin="55 7 0 0"/>
                         <TextBox x:Name="TypeTextBox1" Grid.Column="1" Grid.Row="6" Margin="55 0 0 10" Padding="5" MaxLength="50">
+                            <Binding Path="Nazwisko" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <local:MyValidationRule Msg1="Podaj poprwane dane" Msg2="Podaj poprawne dane" MyRegex="^[a-zA-Z0-9]{2,50}$" />
+                                </Binding.ValidationRules>
+                            </Binding>
                             <TextBox.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="5"/>
                                 </Style>
                             </TextBox.Resources>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel >
+                                        <Border BorderBrush="Red" BorderThickness="1" CornerRadius="6">
+                                            <AdornedElementPlaceholder />
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" FontSize="10" HorizontalAlignment="Right" Margin="0 0 5 0"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
                         </TextBox>
 
                         <TextBlock Text="{Binding Path=AccTypeVar2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" Margin="55 7 0 0"/>
                         <TextBox x:Name="TypeTextBox2" Grid.Row="8" Grid.Column="1" Margin="55 0 0 10" Padding="5" MaxLength="50">
+                            <Binding Path="Nazwisko" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <local:MyValidationRule Msg1="Podaj poprwane dane" Msg2="Podaj poprawne dane" MyRegex="^[a-zA-Z0-9]{2,50}$" />
+                                </Binding.ValidationRules>
+                            </Binding>
                             <TextBox.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="5"/>
                                 </Style>
                             </TextBox.Resources>
+                            <Validation.ErrorTemplate>
+                                <ControlTemplate>
+                                    <StackPanel >
+                                        <Border BorderBrush="Red" BorderThickness="1" CornerRadius="6">
+                                            <AdornedElementPlaceholder />
+                                        </Border>
+                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" FontSize="10" HorizontalAlignment="Right" Margin="0 0 5 0"/>
+                                    </StackPanel>
+                                </ControlTemplate>
+                            </Validation.ErrorTemplate>
                         </TextBox>
 
 

@@ -10,15 +10,8 @@ using System.Windows.Controls;
 
 namespace WpfAppMedicalSystemsDraft.UserControls
 {
-    public class MyValidationRule : ValidationRule
+    public class DatePickerValidationRule : ValidationRule
     {
-
-        
-        public string Msg1 { get; set; }
-        
-        public string Msg2 { get; set; }
-
-        public string MyRegex { get; set; }
 
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
@@ -26,13 +19,13 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
 
             if (string.IsNullOrWhiteSpace(userInput))
-                return new ValidationResult(false, Msg1);
+                return new ValidationResult(false, "Podaj datę");
 
             // Email regex pattern for basic validation (you can adjust it as needed)
-            var newRegex = new Regex(MyRegex);
+            var newRegex = new Regex("^[a-zA-Z]{2,40}$");
 
             if (!newRegex.IsMatch(userInput))
-                return new ValidationResult(false, Msg2);
+                return new ValidationResult(false, "Podaj poprawną datę");
 
             return ValidationResult.ValidResult;
         }
