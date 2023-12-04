@@ -143,6 +143,6 @@
         </Menu>
 
         <controls:Login x:Name="LoginControl" Visibility="Collapsed"/>
-
+        <controls:DoctorsList x:Name="DoctorsListControl" Visibility="Collapsed"/>
     </Grid>
 </Window>

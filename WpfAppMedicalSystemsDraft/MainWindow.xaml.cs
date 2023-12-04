@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using WpfAppMedicalSystemsDraft.Enums;
 using WpfAppMedicalSystemsDraft.Models;
 using WpfAppMedicalSystemsDraft.Services;
+using WpfAppMedicalSystemsDraft.UserControls;
 
 namespace WpfAppMedicalSystemsDraft
 {
@@ -33,7 +34,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string AccountTypeEnum { get; private set; } = AccountType.NOT_LOGGED;
+        public string AccountTypeEnum { get; private set; } = AccountType.PACIENT;
         private MedicalSystemsContext medicalSystemsContext;
         private EmailService emailService;
         public MainWindow()
@@ -47,6 +48,7 @@ namespace WpfAppMedicalSystemsDraft
             }
             InitializeComponent();
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
+            DoctorsListControl.OnCloseWindow += DoctorsListClose;
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
             emailService = new EmailService(settings.SmtpApiKey);          
             DataContext = this;
@@ -104,7 +106,10 @@ namespace WpfAppMedicalSystemsDraft
 
         private void DoctorsList_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Lista lekarzy");
+            if (DoctorsListControl.Doctors.Count == 0) {
+                DoctorsListControl.Doctors = medicalSystemsContext.Doctors.ToList();
+            }          
+            DoctorsListControl.Visibility = Visibility.Visible;
         }
 
         private void AddAppointment_Click(object sender, RoutedEventArgs e)
@@ -163,6 +168,11 @@ namespace WpfAppMedicalSystemsDraft
                 LogIn.Visibility = Visibility.Collapsed;
                 LogOut.Visibility = Visibility.Visible;
             }
+        }
+
+        private void DoctorsListClose()
+        {
+            DoctorsListControl.Visibility = Visibility.Collapsed;
         }
     }
 }
