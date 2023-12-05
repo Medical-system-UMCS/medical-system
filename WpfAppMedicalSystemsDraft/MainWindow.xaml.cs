@@ -105,10 +105,8 @@ namespace WpfAppMedicalSystemsDraft
         }
 
         private void DoctorsList_Click(object sender, RoutedEventArgs e)
-        {
-            if (DoctorsListControl.Doctors.Count == 0) {
-                DoctorsListControl.Doctors = medicalSystemsContext.Doctors.ToList();
-            }          
+        {            
+            DoctorsListControl.Doctors = medicalSystemsContext.Doctors.ToList();          
             DoctorsListControl.Visibility = Visibility.Visible;
         }
 
