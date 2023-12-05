@@ -34,7 +34,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string AccountTypeEnum { get; private set; } = AccountType.PACIENT;
+        public string AccountTypeEnum { get; private set; } = AccountType.NOT_LOGGED;
         private MedicalSystemsContext medicalSystemsContext;
         private EmailService emailService;
         public MainWindow()
