@@ -24,7 +24,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         public List<Doctor> Doctors { get; set; } = new List<Doctor>();
         public DoctorsList()
         {
-            InitializeComponent();         
+            InitializeComponent();
             Table.ItemsSource = Doctors;          
         }
 

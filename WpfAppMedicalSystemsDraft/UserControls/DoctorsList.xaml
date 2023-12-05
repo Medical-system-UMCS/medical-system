@@ -15,14 +15,13 @@
                 <Grid Margin="20">
                     <StackPanel>
                         <TextBlock Text="Lista lekarzy" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0 0 0 10"/>
-                        <DataGrid x:Name="Table" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
+                        <DataGrid x:Name="Table" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
                                   CanUserResizeColumns="False" IsReadOnly="True">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=Id}" Visibility="Collapsed"/>
-                                <DataGridTextColumn MinWidth="50" Binding="{Binding Path=FirstName}" Header="Imię"/>
-                                <DataGridTextColumn MinWidth="70" Binding="{Binding Path=LastName}" Header="Nazwisko"/>
-                                <DataGridTextColumn MinWidth="140" Binding="{Binding Path=Specialization}" Header="Specjalizacja"/>
-                                <DataGridTextColumn Width="*" Binding="{Binding Path=ScientificDegree}" Header="Stopień naukowy"/>
+                                <DataGridTextColumn MinWidth="50" Binding="{Binding FirstName}" Header="Imię"/>
+                                <DataGridTextColumn MinWidth="70" Binding="{Binding LastName}" Header="Nazwisko"/>
+                                <DataGridTextColumn MinWidth="140" Binding="{Binding Specialization}" Header="Specjalizacja"/>
+                                <DataGridTextColumn Width="*" Binding="{Binding ScientificDegree}" Header="Stopień naukowy"/>
                             </DataGrid.Columns>
                         </DataGrid>
                         <Button x:Name="CloseButton" Width="100" Background="#2196F3" Foreground="White" Content="Zamknij" Height="20" Margin="0 20 0 0" Click="CloseButton_Click"/>
