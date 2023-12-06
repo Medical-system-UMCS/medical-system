@@ -127,7 +127,7 @@ namespace WpfAppMedicalSystemsDraft
         private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
         {
             ApproveDoctorsControl.AddDoctorOverlay.IsOpen = true;
-            ApproveDoctorsControl.FirstName.Focus();
+            //ApproveDoctorsControl.FirstName.Focus();
         }
 
         private void ManageUsers_Click(object sender, RoutedEventArgs e)
