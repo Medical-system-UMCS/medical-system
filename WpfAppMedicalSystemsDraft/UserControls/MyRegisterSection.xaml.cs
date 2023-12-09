@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using WpfAppMedicalSystemsDraft.Enums;
+using WpfAppMedicalSystemsDraft.Helpers;
+using WpfAppMedicalSystemsDraft.Models;
 
 namespace WpfAppMedicalSystemsDraft.UserControls
 {
@@ -76,7 +79,24 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                 }
                 else
                 {
-                    RegisterOverlay.Visibility = Visibility.Collapsed;
+                    Patient patient = new Patient
+                    {
+                        FirstName = FirstNameTextBox.Text,
+                        LastName = LastNameTextBox.Text,
+                        Dayofbirth = DateOnly.Parse(DateOfBirthPicker.Text),
+                        Weight = int.Parse(TypeTextBox1.Text),
+                        Height = int.Parse(TypeTextBox2.Text)
+                    };
+                    User user = new User
+                    {
+                        AccountType = AccountType.PACIENT,
+                        Login = string.Join("_", patient.FirstName.ToLower(), patient.LastName.ToLower()),
+                        Password = HashHelper.GenerateHash(PasswordBox.Password),
+                        Verified = true,
+                        Email = EmailTextBox.Text
+                    };
+                    MessageBox.Show(user.Email);
+                    OnRegisterPatient.Invoke(patient, user);
                 }
             }
             else if (!typeIsPatient)
@@ -143,6 +163,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             //e.ThrowException = true;
         }
 
-
+        public event Action<Doctor, User> OnRegisterDoctor;
+        public event Action<Patient, User> OnRegisterPatient;
     }
 }

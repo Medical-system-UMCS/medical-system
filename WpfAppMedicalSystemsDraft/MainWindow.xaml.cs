@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -18,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAppMedicalSystemsDraft.Enums;
+using WpfAppMedicalSystemsDraft.Helpers;
 using WpfAppMedicalSystemsDraft.Models;
 using WpfAppMedicalSystemsDraft.Services;
 using WpfAppMedicalSystemsDraft.UserControls;
@@ -47,11 +49,49 @@ namespace WpfAppMedicalSystemsDraft
                 return;
             }
             InitializeComponent();
+            RegisterControl.OnRegisterDoctor += RegisterDoctorOnSubmit;
+            RegisterControl.OnRegisterPatient += RegisterPacientOnSubmit;
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
             DoctorsListControl.OnCloseWindow += DoctorsListClose;
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
             emailService = new EmailService(settings.SmtpApiKey);          
             DataContext = this;
+        }
+
+        private void RegisterPacientOnSubmit(Patient patient, User user)
+        {
+            medicalSystemsContext.Users.Add(user);
+            medicalSystemsContext.SaveChanges();            
+            patient.UserId = user.Id;
+            medicalSystemsContext.Patients.Add(patient);
+            medicalSystemsContext.SaveChanges();
+            string fullName = string.Join(' ', patient.FirstName, patient.LastName);
+            string[] paramsValue = { user.Login, fullName};
+            emailService.SendEmail(user.Email, fullName, EmailType.ACCOUNT_CONFIRMATION, paramsValue);
+            MessageBox.Show("Sprawdź podany email");
+            RegisterControl.Visibility = Visibility.Collapsed;
+            AccountTypeEnum = user.AccountType;
+            if (AccountTypeEnum.Equals(AccountType.PACIENT))
+            {
+                Appointments.Visibility = Visibility.Visible;
+                Doctors.Visibility = Visibility.Visible;
+                Register.Visibility = Visibility.Collapsed;
+                LogIn.Visibility = Visibility.Collapsed;
+                LogOut.Visibility = Visibility.Visible;
+            }
+            if (AccountTypeEnum.Equals(AccountType.DOCTOR))
+            {
+                Doctors.Visibility = Visibility.Visible;
+                ManageExaminations.Visibility = Visibility.Visible;
+                Register.Visibility = Visibility.Collapsed;
+                LogIn.Visibility = Visibility.Collapsed;
+                LogOut.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void RegisterDoctorOnSubmit(Doctor doctor, User user)
+        {
+            throw new NotImplementedException();
         }
 
         private static AppSettings? ReadSettings()
@@ -129,17 +169,15 @@ namespace WpfAppMedicalSystemsDraft
                 LoginControl.Visibility = Visibility.Hidden;
                 return;
             }
-            using (SHA256 sHA256 = SHA256.Create())
+
+            string computedHash = HashHelper.GenerateHash(password);
+            if (computedHash != user.Password)
             {
-                byte[] inputBytes = sHA256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                string computedHash = BitConverter.ToString(inputBytes).Replace("-", string.Empty).ToLower();
-                if (computedHash != user.Password)
-                {
-                    MessageBox.Show("Użytkownik nie został znaleziony!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                    LoginControl.Visibility = Visibility.Hidden;
-                    return;
-                }
+                MessageBox.Show("Użytkownik nie został znaleziony!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                LoginControl.Visibility = Visibility.Hidden;
+                return;
             }
+           
             AccountTypeEnum = user.AccountType;
             LoginControl.Visibility = Visibility.Hidden;
 
