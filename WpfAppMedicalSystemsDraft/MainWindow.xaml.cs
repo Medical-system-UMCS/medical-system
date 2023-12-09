@@ -101,7 +101,7 @@ namespace WpfAppMedicalSystemsDraft
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Okno rejestracji");
+            RegisterControl.Visibility = Visibility.Visible;
         }
 
         private void DoctorsList_Click(object sender, RoutedEventArgs e)
