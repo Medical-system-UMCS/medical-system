@@ -36,7 +36,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                 MessageBox.Show("Podaj poprawne imie!");
                 FirstNameTextBox.Focus();
             }
-            else if (!Regex.IsMatch(LastNameTextBox.Text, @"^[a-zA-Z]{3,30}$"))
+            else if (!Regex.IsMatch(LastNameTextBox.Text, @"^[a-zA-Z]{3,40}$"))
             {
                 MessageBox.Show("Podaj poprawne nazwisko!");
                 LastNameTextBox.Focus();
@@ -46,7 +46,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                 MessageBox.Show("Podaj poprawny email!");
                 EmailTextBox.Focus();
             }
-            if (DateOfBirthPicker.SelectedDate == null)
+            else if (DateOfBirthPicker.SelectedDate == null)
             {
                 MessageBox.Show("Podaj datę!");
                 DateOfBirthPicker.Focus();
@@ -96,8 +96,6 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                     RegisterOverlay.Visibility = Visibility.Collapsed;
                 }
             } 
-            
-
         }
 
 
