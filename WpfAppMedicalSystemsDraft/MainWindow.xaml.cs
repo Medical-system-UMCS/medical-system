@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -15,21 +17,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfAppMedicalSystemsDraft.Enums;
 using WpfAppMedicalSystemsDraft.Models;
+using WpfAppMedicalSystemsDraft.Services;
+using WpfAppMedicalSystemsDraft.UserControls;
 
 namespace WpfAppMedicalSystemsDraft
 {
     class AppSettings
     {
-        public string ConnectionString{ get; set; }
+        public string ConnectionString { get; set; }
+        public string SmtpApiKey { get; set; }
     }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public bool IsLogged { get; set; } = false;
+        public string AccountTypeEnum { get; private set; } = AccountType.NOT_LOGGED;
         private MedicalSystemsContext medicalSystemsContext;
+        private EmailService emailService;
         public MainWindow()
         {
             var settings = ReadSettings();
@@ -40,7 +47,10 @@ namespace WpfAppMedicalSystemsDraft
                 return;
             }
             InitializeComponent();
+            LoginControl.OnSubmitLogin += LoginControlOnSubmit;
+            DoctorsListControl.OnCloseWindow += DoctorsListClose;
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
+            emailService = new EmailService(settings.SmtpApiKey);          
             DataContext = this;
         }
 
@@ -48,15 +58,16 @@ namespace WpfAppMedicalSystemsDraft
         {
             string filePath = "data.bin";
             string? connectionString;
-
+            string? smtpApiKey;
             if (File.Exists(filePath))
             {
- 
+
                 FileStream fs1 = new FileStream(filePath, FileMode.Open);
                 BinaryReader br = new BinaryReader(fs1);
                 try
                 {
-                    connectionString = br.ReadString();
+                    connectionString = BinaryToString(br.ReadString());
+                    smtpApiKey = BinaryToString(br.ReadString());
                 }
                 catch (IOException ex)
                 {
@@ -69,12 +80,23 @@ namespace WpfAppMedicalSystemsDraft
             {
                 return null;
             }
-            return new AppSettings{ConnectionString = connectionString};
+            return new AppSettings { ConnectionString = connectionString, SmtpApiKey = smtpApiKey };
         }
 
-        private void Login_Click(object sender, RoutedEventArgs e)
+        static string BinaryToString(string data)
         {
-            MessageBox.Show("Okno logowania");
+            List<byte> byteList = new List<byte>();
+
+            for (int i = 0; i < data.Length; i += 8)
+            {
+                byteList.Add(Convert.ToByte(data.Substring(i, 8), 2));
+            }
+            return Encoding.ASCII.GetString(byteList.ToArray());
+        }
+
+        public void Login_Click(object sender, RoutedEventArgs e)
+        {
+            LoginControl.Visibility = Visibility.Visible;
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
@@ -83,8 +105,9 @@ namespace WpfAppMedicalSystemsDraft
         }
 
         private void DoctorsList_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Lista lekarzów");
+        {            
+            DoctorsListControl.Doctors = medicalSystemsContext.Doctors.ToList();          
+            DoctorsListControl.Visibility = Visibility.Visible;
         }
 
         private void AddAppointment_Click(object sender, RoutedEventArgs e)
@@ -95,6 +118,59 @@ namespace WpfAppMedicalSystemsDraft
         private void ExitApp_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void LoginControlOnSubmit(string username, string password)
+        {
+            User? user = medicalSystemsContext.Users.FirstOrDefault(user => user.Login.Equals(username));
+            if (user == null)
+            {
+                MessageBox.Show("Użytkownik nie został znaleziony!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                LoginControl.Visibility = Visibility.Hidden;
+                return;
+            }
+            using (SHA256 sHA256 = SHA256.Create())
+            {
+                byte[] inputBytes = sHA256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                string computedHash = BitConverter.ToString(inputBytes).Replace("-", string.Empty).ToLower();
+                if (computedHash != user.Password)
+                {
+                    MessageBox.Show("Użytkownik nie został znaleziony!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    LoginControl.Visibility = Visibility.Hidden;
+                    return;
+                }
+            }
+            AccountTypeEnum = user.AccountType;
+            LoginControl.Visibility = Visibility.Hidden;
+
+            if (AccountTypeEnum.Equals(AccountType.ADMIN))
+            {
+                ManageControl.Visibility = Visibility.Visible;
+                Register.Visibility = Visibility.Collapsed;
+                LogIn.Visibility = Visibility.Collapsed;
+                LogOut.Visibility = Visibility.Visible;
+            }
+            if (AccountTypeEnum.Equals(AccountType.PACIENT))
+            {
+                Appointments.Visibility = Visibility.Visible;
+                Doctors.Visibility = Visibility.Visible;
+                Register.Visibility = Visibility.Collapsed;
+                LogIn.Visibility = Visibility.Collapsed;
+                LogOut.Visibility = Visibility.Visible;
+            }
+            if (AccountTypeEnum.Equals(AccountType.DOCTOR))
+            {
+                Doctors.Visibility = Visibility.Visible;
+                ManageExaminations.Visibility = Visibility.Visible;
+                Register.Visibility = Visibility.Collapsed;
+                LogIn.Visibility = Visibility.Collapsed;
+                LogOut.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void DoctorsListClose()
+        {
+            DoctorsListControl.Visibility = Visibility.Collapsed;
         }
     }
 }
