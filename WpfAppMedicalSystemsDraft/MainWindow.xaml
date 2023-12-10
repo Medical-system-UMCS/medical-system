@@ -140,7 +140,7 @@
                 <MenuItem Header="Zarządzaj użytkownikami"/>
             </MenuItem>
         </Menu>
-        <controls:MyRegisterSection x:Name="RegisterControl" Visibility="Collapsed"/>
+        <controls:Registration x:Name="RegisterControl" Visibility="Collapsed"/>
         <controls:Login x:Name="LoginControl" Visibility="Collapsed"/>
         <controls:DoctorsList x:Name="DoctorsListControl" Visibility="Collapsed"/>
     </Grid>

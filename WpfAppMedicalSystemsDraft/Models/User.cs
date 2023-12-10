@@ -16,6 +16,7 @@ namespace WpfAppMedicalSystemsDraft.Models
         public string Password { get; set; } = null!;
         public string AccountType { get; set; } = null!;
         public bool Verified { get; set; }
+        public string Email { get; set; } = null!;
 
         public virtual ICollection<Doctor> Doctors { get; set; }
         public virtual ICollection<Patient> Patients { get; set; }

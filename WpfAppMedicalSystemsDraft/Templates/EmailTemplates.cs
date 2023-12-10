@@ -33,6 +33,24 @@ namespace WpfAppMedicalSystemsDraft.Services
                 }
             });
 
+            emailTemplates.Add(EmailType.DOCTOR_REGISTRATION, new Template
+            {
+                Header = "Rejestracja konta lekarza",
+                Content = @"<html>
+                            <body>
+                                <p>Dzień dobry!</p>
+                                <p>Konto '{{params.login}}' zostało zarejestrowane. Czekaj na potwierdzenie, aby korzystać z aplikacji.
+                                <p>Z poważaniem,<br>
+                                Administrator systemu medycznego MFII</p>                
+                            </body>
+                        </html>",
+                Params = new()
+                {
+                    { ParamType.LOGIN, "" },
+                    { ParamType.FULL_NAME, "" }
+                }
+            });
+
             // Dodanie kolejnych wzorców
         }
 
