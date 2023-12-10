@@ -53,7 +53,7 @@ namespace WpfAppMedicalSystemsDraft
             RegisterControl.OnRegisterPatient += RegisterPacientOnSubmit;
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
             DoctorsListControl.OnCloseWindow += DoctorsListClose;
-            medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
+            medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
             emailService = new EmailService(settings.SmtpApiKey);          
             DataContext = this;
         }
@@ -109,8 +109,8 @@ namespace WpfAppMedicalSystemsDraft
         }
 
         private void DoctorsList_Click(object sender, RoutedEventArgs e)
-        {            
-            DoctorsListControl.Doctors = medicalSystemsContext.Doctors.ToList();          
+        {
+            DoctorsListControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());            
             DoctorsListControl.Visibility = Visibility.Visible;
         }
 
