@@ -58,42 +58,6 @@ namespace WpfAppMedicalSystemsDraft
             DataContext = this;
         }
 
-        private void RegisterPacientOnSubmit(Patient patient, User user)
-        {
-            medicalSystemsContext.Users.Add(user);
-            medicalSystemsContext.SaveChanges();            
-            patient.UserId = user.Id;
-            medicalSystemsContext.Patients.Add(patient);
-            medicalSystemsContext.SaveChanges();
-            string fullName = string.Join(' ', patient.FirstName, patient.LastName);
-            string[] paramsValue = { user.Login, fullName};
-            emailService.SendEmail(user.Email, fullName, EmailType.ACCOUNT_CONFIRMATION, paramsValue);
-            MessageBox.Show("Sprawdź podany email");
-            RegisterControl.Visibility = Visibility.Collapsed;
-            AccountTypeEnum = user.AccountType;
-            if (AccountTypeEnum.Equals(AccountType.PACIENT))
-            {
-                Appointments.Visibility = Visibility.Visible;
-                Doctors.Visibility = Visibility.Visible;
-                Register.Visibility = Visibility.Collapsed;
-                LogIn.Visibility = Visibility.Collapsed;
-                LogOut.Visibility = Visibility.Visible;
-            }
-            if (AccountTypeEnum.Equals(AccountType.DOCTOR))
-            {
-                Doctors.Visibility = Visibility.Visible;
-                ManageExaminations.Visibility = Visibility.Visible;
-                Register.Visibility = Visibility.Collapsed;
-                LogIn.Visibility = Visibility.Collapsed;
-                LogOut.Visibility = Visibility.Visible;
-            }
-        }
-
-        private void RegisterDoctorOnSubmit(Doctor doctor, User user)
-        {
-            throw new NotImplementedException();
-        }
-
         private static AppSettings? ReadSettings()
         {
             string filePath = "data.bin";
@@ -158,6 +122,45 @@ namespace WpfAppMedicalSystemsDraft
         private void ExitApp_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void RegisterPacientOnSubmit(Patient patient, User user)
+        {
+            medicalSystemsContext.Users.Add(user);
+            medicalSystemsContext.SaveChanges();
+            patient.UserId = user.Id;
+            medicalSystemsContext.Patients.Add(patient);
+            medicalSystemsContext.SaveChanges();
+            string fullName = string.Join(' ', patient.FirstName, patient.LastName);
+            string[] paramsValue = { user.Login, fullName };
+            emailService.SendEmail(user.Email, fullName, EmailType.ACCOUNT_CONFIRMATION, paramsValue);
+            MessageBox.Show("Czekaj na potwierdzenie od administratora na podany email");
+            RegisterControl.Visibility = Visibility.Collapsed;                      
+            Appointments.Visibility = Visibility.Visible;
+            Doctors.Visibility = Visibility.Visible;
+            Register.Visibility = Visibility.Collapsed;
+            LogIn.Visibility = Visibility.Collapsed;
+            LogOut.Visibility = Visibility.Visible;
+                        
+        }
+
+        private void RegisterDoctorOnSubmit(Doctor doctor, User user)
+        {
+            medicalSystemsContext.Users.Add(user);
+            medicalSystemsContext.SaveChanges();
+            doctor.UserId = user.Id;
+            medicalSystemsContext.Doctors.Add(doctor);
+            medicalSystemsContext.SaveChanges();
+            string fullName = string.Join(' ', doctor.FirstName, doctor.LastName);
+            string[] paramsValue = { user.Login, fullName };
+            emailService.SendEmail(user.Email, fullName, EmailType.DOCTOR_REGISTRATION, paramsValue);
+            MessageBox.Show("Czekaj na potwierdzenie od administratora na podany email");
+            RegisterControl.Visibility = Visibility.Collapsed;
+            Doctors.Visibility = Visibility.Visible;
+            ManageExaminations.Visibility = Visibility.Visible;
+            Register.Visibility = Visibility.Collapsed;
+            LogIn.Visibility = Visibility.Collapsed;
+            LogOut.Visibility = Visibility.Visible;
         }
 
         private void LoginControlOnSubmit(string username, string password)

@@ -10,11 +10,11 @@ using WpfAppMedicalSystemsDraft.Models;
 namespace WpfAppMedicalSystemsDraft.UserControls
 {
     
-    public partial class MyRegisterSection : UserControl
+    public partial class Registration : UserControl
     {
 
 
-        public MyRegisterSection()
+        public Registration()
         {
             InitializeComponent();
             this.DataContext = this;
@@ -36,7 +36,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
             if(!Regex.IsMatch(FirstNameTextBox.Text, @"^[a-zA-Z]{3,30}$"))
             {
-                MessageBox.Show("Podaj poprawne imie!");
+                MessageBox.Show("Podaj poprawne imię!");
                 FirstNameTextBox.Focus();
             }
             else if (!Regex.IsMatch(LastNameTextBox.Text, @"^[a-zA-Z]{3,40}$"))
@@ -48,16 +48,10 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             {
                 MessageBox.Show("Podaj poprawny email!");
                 EmailTextBox.Focus();
-            }
-            else if (DateOfBirthPicker.SelectedDate == null)
-            {
-                MessageBox.Show("Podaj datę!");
-                DateOfBirthPicker.Focus();
-            }   
+            }          
             else if (!Regex.IsMatch(PasswordBox.Password, @"^[a-zA-Z0-9!@#$%^&]{6,32}$"))
             {
                 MessageBox.Show("Podaj poprawne hasło!");
-                //PasswordBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 PasswordBox.Focus();
             }
             else if (PasswordBox.Password != RepeatPasswordBox.Password)
@@ -67,53 +61,67 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             } 
             else if (typeIsPatient)
             {
-                if (!Regex.IsMatch(TypeTextBox1.Text, @"^[0-9]{2,3}$"))
+                if (!Regex.IsMatch(WeightDegree.Text, @"^[0-9]{2,3}$"))
                 {
                     MessageBox.Show("Podaj poprawną wagę!");
-                    TypeTextBox1.Focus();
+                    WeightDegree.Focus();
                 }
-                else if (!Regex.IsMatch(TypeTextBox2.Text, @"^[0-9]{2,3}$"))
+                else if (!Regex.IsMatch(HeightSpecialization.Text, @"^[0-9]{2,3}$"))
                 {
                     MessageBox.Show("Podaj poprawny wzrost");
-                    TypeTextBox2.Focus();
+                    HeightSpecialization.Focus();
                 }
                 else
                 {
                     Patient patient = new Patient
                     {
-                        FirstName = FirstNameTextBox.Text,
-                        LastName = LastNameTextBox.Text,
+                        FirstName = FirstNameTextBox.Text.Trim(),
+                        LastName = LastNameTextBox.Text.Trim(),
                         Dayofbirth = DateOnly.Parse(DateOfBirthPicker.Text),
-                        Weight = int.Parse(TypeTextBox1.Text),
-                        Height = int.Parse(TypeTextBox2.Text)
+                        Weight = int.Parse(WeightDegree.Text.Trim()),
+                        Height = int.Parse(HeightSpecialization.Text.Trim())
                     };
                     User user = new User
                     {
                         AccountType = AccountType.PACIENT,
-                        Login = string.Join("_", patient.FirstName.ToLower(), patient.LastName.ToLower()),
+                        Login = string.Join('_', patient.FirstName.Trim().ToLower(), patient.LastName.Trim().ToLower()),
                         Password = HashHelper.GenerateHash(PasswordBox.Password),
                         Verified = true,
-                        Email = EmailTextBox.Text
+                        Email = EmailTextBox.Text.Trim()
                     };
-                    MessageBox.Show(user.Email);
                     OnRegisterPatient.Invoke(patient, user);
                 }
             }
             else if (!typeIsPatient)
             {
-                if (!Regex.IsMatch(TypeTextBox1.Text, @"^[a-zA-Z0-9]{3,50}$"))
+                if (!Regex.IsMatch(WeightDegree.Text, @"^[a-zA-Z0-9\s.]{3,50}$"))
                 {
                     MessageBox.Show("Podaj poprawny stopień naukowy!");
-                    TypeTextBox1.Focus();
+                    WeightDegree.Focus();
                 }
-                else if (!Regex.IsMatch(TypeTextBox2.Text, @"^[a-zA-Z0-9]{3,50}$"))
+                else if (!Regex.IsMatch(HeightSpecialization.Text, @"^[a-zA-Z0-9\s.]{3,50}$"))
                 {
                     MessageBox.Show("Podaj poprawną specjalizację!");
-                    TypeTextBox2.Focus();
+                    HeightSpecialization.Focus();
                 }
                 else
                 {
-                    RegisterOverlay.Visibility = Visibility.Collapsed;
+                    Doctor doctor = new Doctor
+                    {
+                        FirstName = FirstNameTextBox.Text.Trim(),
+                        LastName = LastNameTextBox.Text.Trim(),
+                        ScientificDegree = WeightDegree.Text.Trim(),
+                        Specialization = HeightSpecialization.Text.Trim()
+                    };
+                    User user = new User
+                    {
+                        AccountType = AccountType.DOCTOR,
+                        Login = string.Join('_', doctor.FirstName.Trim().ToLower(), doctor.LastName.Trim().ToLower()),
+                        Password = HashHelper.GenerateHash(PasswordBox.Password),
+                        Verified = false,
+                        Email = EmailTextBox.Text.Trim()
+                    };
+                    OnRegisterDoctor.Invoke(doctor, user);
                 }
             } 
         }
@@ -126,7 +134,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         }
 
         public static readonly DependencyProperty AccTypeVar1Property =
-            DependencyProperty.Register("AccTypeVar1", typeof(string), typeof(MyRegisterSection), new PropertyMetadata(null));
+            DependencyProperty.Register("AccTypeVar1", typeof(string), typeof(Registration), new PropertyMetadata(null));
 
         public string AccTypeVar2
         {
@@ -135,7 +143,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         }
 
         public static readonly DependencyProperty AccTypeVar2Property =
-            DependencyProperty.Register("AccTypeVar2", typeof(string), typeof(MyRegisterSection), new PropertyMetadata(null));
+            DependencyProperty.Register("AccTypeVar2", typeof(string), typeof(Registration), new PropertyMetadata(null));
 
 
 
@@ -160,7 +168,6 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         private void DateOfBirthPicker_Validation(object sender, DatePickerDateValidationErrorEventArgs e)
         {
             MessageBox.Show("Podaj poprawną datę!");
-            //e.ThrowException = true;
         }
 
         public event Action<Doctor, User> OnRegisterDoctor;
