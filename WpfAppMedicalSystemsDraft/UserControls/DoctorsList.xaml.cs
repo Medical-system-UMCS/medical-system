@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,11 +23,15 @@ namespace WpfAppMedicalSystemsDraft.UserControls
     /// </summary>
     public partial class DoctorsList : UserControl
     {
-        public List<Doctor> Doctors { get; set; } = new List<Doctor>();
         public DoctorsList()
         {
-            InitializeComponent();
-            Table.ItemsSource = Doctors;          
+            InitializeComponent();                                   
+        }
+
+        public void LoadDoctors(List<Doctor> doctors)
+        {
+            Table.Items.Clear();           
+            doctors.ForEach(doctor => Table.Items.Add(doctor));
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
