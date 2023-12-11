@@ -42,7 +42,7 @@
                             <TextBox.Text>
                                 <Binding Path="Nazwisko" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
-                                        <local:MyValidationRule Msg1="Podaj imię" Msg2="Podaj poprawne imię" MyRegex="^[a-zA-Z]{3,30}$" />
+                                        <local:MyValidationRule Msg1="Podaj imię" Msg2="Podaj poprawne imię" MyRegex="^[\p{L}]{3,30}$" />
                                     </Binding.ValidationRules>
                                 </Binding>
                             </TextBox.Text>
@@ -68,7 +68,7 @@
                             <TextBox.Text>
                                 <Binding Path="Nazwisko" UpdateSourceTrigger="PropertyChanged">
                                     <Binding.ValidationRules>
-                                        <local:MyValidationRule Msg1="Podaj nazwisko" Msg2="Podaj poprawne nazwisko" MyRegex="^[a-zA-Z]{2,40}$" />
+                                        <local:MyValidationRule Msg1="Podaj nazwisko" Msg2="Podaj poprawne nazwisko" MyRegex="^[\p{L}]{2,40}$" />
                                     </Binding.ValidationRules>
                                 </Binding>
                             </TextBox.Text>
@@ -231,7 +231,7 @@
                         <TextBox x:Name="WeightDegree" Grid.Column="1" Grid.Row="6" Margin="55 0 0 10" Padding="5" MaxLength="50">
                             <Binding Path="Nazwisko" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <local:MyValidationRule Msg1="Podaj poprwane dane" Msg2="Podaj poprawne dane" MyRegex="^[a-zA-Z0-9\s.]{2,50}$" />
+                                    <local:MyValidationRule Msg1="Podaj poprwane dane" Msg2="Podaj poprawne dane" MyRegex="^[\p{L}0-9\s.]{2,50}$" />
                                 </Binding.ValidationRules>
                             </Binding>
                             <TextBox.Resources>
@@ -255,7 +255,7 @@
                         <TextBox x:Name="HeightSpecialization" Grid.Row="8" Grid.Column="1" Margin="55 0 0 10" Padding="5" MaxLength="50">
                             <Binding Path="Nazwisko" UpdateSourceTrigger="PropertyChanged">
                                 <Binding.ValidationRules>
-                                    <local:MyValidationRule Msg1="Podaj poprawane dane" Msg2="Podaj poprawne dane" MyRegex="^[a-zA-Z0-9\s.]{2,50}$" />
+                                    <local:MyValidationRule Msg1="Podaj poprawane dane" Msg2="Podaj poprawne dane" MyRegex="^[\p{L}0-9\s.]{2,50}$" />
                                 </Binding.ValidationRules>
                             </Binding>
                             <TextBox.Resources>

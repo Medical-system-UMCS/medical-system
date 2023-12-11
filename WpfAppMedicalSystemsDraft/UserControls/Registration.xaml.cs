@@ -34,12 +34,12 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         public void SubmitRegister_Click(object sender, RoutedEventArgs e)
         {
 
-            if(!Regex.IsMatch(FirstNameTextBox.Text, @"^[a-zA-Z]{3,30}$"))
+            if(!Regex.IsMatch(FirstNameTextBox.Text, @"^[\p{L}]{3,30}$"))
             {
                 MessageBox.Show("Podaj poprawne imię!");
                 FirstNameTextBox.Focus();
             }
-            else if (!Regex.IsMatch(LastNameTextBox.Text, @"^[a-zA-Z]{3,40}$"))
+            else if (!Regex.IsMatch(LastNameTextBox.Text, @"^[\p{L}]{3,40}$"))
             {
                 MessageBox.Show("Podaj poprawne nazwisko!");
                 LastNameTextBox.Focus();
@@ -94,12 +94,12 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             }
             else if (!typeIsPatient)
             {
-                if (!Regex.IsMatch(WeightDegree.Text, @"^[a-zA-Z0-9\s.]{3,50}$"))
+                if (!Regex.IsMatch(WeightDegree.Text, @"^[\p{L}\s.]{3,50}$"))
                 {
                     MessageBox.Show("Podaj poprawny stopień naukowy!");
                     WeightDegree.Focus();
                 }
-                else if (!Regex.IsMatch(HeightSpecialization.Text, @"^[a-zA-Z0-9\s.]{3,50}$"))
+                else if (!Regex.IsMatch(HeightSpecialization.Text, @"^[\p{L}\s.]{3,50}$"))
                 {
                     MessageBox.Show("Podaj poprawną specjalizację!");
                     HeightSpecialization.Focus();
