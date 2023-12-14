@@ -27,45 +27,28 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         public ApproveDoctors()
         {
             InitializeComponent();
-
-            ApprovedDoctors = new List<Doctor>
-            {
-                // Add dummy data for doctors
-                new() {
-                    Id = 1,
-                    FirstName = "Jan",
-                    LastName = "Kowalski",
-                    Specialization = "Kardiologia",
-                    ScientificDegree = "Lek. n. med.",
-                  
-                    // Add more properties as needed
-                },
-                new () {
-                    Id = 2,
-                    FirstName = "Piotr",
-                    LastName = "Nowak",
-                    Specialization = "Neurochirurgia",
-                    ScientificDegree = "Dr. n. med.",
-                    
-                    // Add more properties as needed
-                }
-            };
-
             
-            doctorApprovalGrid.ItemsSource = ApprovedDoctors;
+
+            Table.ItemsSource = ApprovedDoctors; 
         }
+
+        public void LoadDoctors(List<Doctor> doctors)
+        {
+            ApprovedDoctors = new List<Doctor>(doctors);
+
+            Table.ItemsSource = ApprovedDoctors;
+        }
+
         private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
         {
-            if (doctorApprovalGrid.SelectedItem is Doctor selectedDoctor)
+            if (Table.SelectedItem is Doctor selectedDoctor)
             {
-               
                 ApprovedDoctors.Remove(selectedDoctor);
-                //user.verified = true
-               
-                doctorApprovalGrid.Items.Refresh();
+
+                Table.Items.Refresh();
             }
 
-            CancelAddDoctor_Click(sender, e);
+            //CancelAddDoctor_Click(sender, e);
         }
 
         private void CancelAddDoctor_Click(object sender, RoutedEventArgs e)
@@ -76,10 +59,15 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             AddDoctorOverlay.IsOpen = false;
         }
 
-        private void DoctorApprovalGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Table_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Enable/disable Confirm button based on whether a row is selected
-            confirmButton.IsEnabled = doctorApprovalGrid.SelectedItems.Count == 1;
+            confirmButton.IsEnabled = Table.SelectedItems.Count == 1;
+        }
+
+        public List<Doctor> GetApprovedDoctors()
+        {
+            return ApprovedDoctors;
         }
     }
 }

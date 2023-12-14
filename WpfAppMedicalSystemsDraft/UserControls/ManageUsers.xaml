@@ -22,7 +22,7 @@
                                 <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}"/>
                                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}"/>
                                 <DataGridTextColumn Header="Specjalizacja" Binding="{Binding Specialization}"/>
-                                <DataGridTextColumn Header="Tytuł naukowy" Binding="{Binding ScientificDegree}"/>
+                                <DataGridTextColumn Header="Stopień naukowy" Binding="{Binding ScientificDegree}"/>
                                 <!-- Add more doctor details as needed -->
                             </DataGrid.Columns>
                         </DataGrid>

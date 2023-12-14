@@ -14,8 +14,8 @@
                     <TextBlock Text="Potwierdź lekarza" FontWeight="Bold" FontSize="16" Margin="10"/>
 
                     <!-- Doctors Table -->
-                    <DataGrid x:Name="doctorApprovalGrid" AutoGenerateColumns="False" CanUserAddRows="False" Width="Auto" Height="Auto" Margin="10"
-                              SelectionChanged="DoctorApprovalGrid_SelectionChanged" IsReadOnly="True">
+                    <DataGrid x:Name="Table" AutoGenerateColumns="False" CanUserAddRows="False" Width="Auto" Height="Auto" Margin="10"
+                              SelectionChanged="Table_SelectionChanged" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" />
                             <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}"/>
