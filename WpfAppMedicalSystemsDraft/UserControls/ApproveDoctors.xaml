@@ -29,10 +29,10 @@
 
                     <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                         <!-- Confirm button -->
-                        <Button x:Name="confirmButton" Content="Potwierdź" Click="ConfirmDoctor_Click" Width="100" Margin="0,0,50,0" IsEnabled="False"/>
+                        <Button x:Name="confirmButton" Content="Potwierdź" Click="ConfirmDoctor_Click" Width="100" Margin="0,0,50,0" IsEnabled="False" Background="Green"/>
 
                         <!-- Cancel button -->
-                        <Button Content="Anuluj" Click="CancelAddDoctor_Click" Width="100"/>
+                        <Button Content="Anuluj" Click="CancelAddDoctor_Click" Width="100" Background="Red"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
