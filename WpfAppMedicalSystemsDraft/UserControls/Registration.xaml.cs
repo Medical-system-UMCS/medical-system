@@ -84,7 +84,8 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                     User user = new User
                     {
                         AccountType = AccountType.PACIENT,
-                        Login = string.Join('_', patient.FirstName.Trim().ToLower(), patient.LastName.Trim().ToLower()),
+                        Login = string.Join('_', PolishLettersHelper.ReplacePolishLetters(patient.FirstName.Trim().ToLower()),
+                        PolishLettersHelper.ReplacePolishLetters(patient.LastName.Trim().ToLower())),
                         Password = HashHelper.GenerateHash(PasswordBox.Password),
                         Verified = true,
                         Email = EmailTextBox.Text.Trim()
@@ -116,7 +117,8 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                     User user = new User
                     {
                         AccountType = AccountType.DOCTOR,
-                        Login = string.Join('_', doctor.FirstName.Trim().ToLower(), doctor.LastName.Trim().ToLower()),
+                        Login = string.Join('_', PolishLettersHelper.ReplacePolishLetters(doctor.FirstName.Trim().ToLower()), 
+                        PolishLettersHelper.ReplacePolishLetters(doctor.LastName.Trim().ToLower())),
                         Password = HashHelper.GenerateHash(PasswordBox.Password),
                         Verified = false,
                         Email = EmailTextBox.Text.Trim()
