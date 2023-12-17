@@ -136,12 +136,16 @@
                         </Style.Triggers>
                     </Style>
                 </MenuItem.Style>
-                <MenuItem Header="Potwierdź lekarza"/>
-                <MenuItem Header="Zarządzaj użytkownikami"/>
+                <MenuItem Header="Potwierdź lekarza" Click="ConfirmDoctor_Click"/>
+                <MenuItem Header="Zarządzaj użytkownikami" Click="ManageUsers_Click"/>
             </MenuItem>
         </Menu>
         <controls:Registration x:Name="RegisterControl" Visibility="Collapsed"/>
         <controls:Login x:Name="LoginControl" Visibility="Collapsed"/>
-        <controls:DoctorsList x:Name="DoctorsListControl" Visibility="Collapsed"/>
+        
+        <controls:ApproveDoctors x:Name="ApproveDoctorsControl" />
+        <controls:ManageUsers x:Name="ManageUsersControl"/>
+       
+         <controls:DoctorsList x:Name="DoctorsListControl" Visibility="Collapsed"/>
     </Grid>
 </Window>

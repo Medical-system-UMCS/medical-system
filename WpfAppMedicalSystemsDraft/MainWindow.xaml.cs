@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Intrinsics.Arm;
@@ -54,6 +55,8 @@ namespace WpfAppMedicalSystemsDraft
                 Application.Current.Shutdown();
                 return;
             }
+
+           
             InitializeComponent();
             RegisterControl.OnRegisterDoctor += RegisterDoctorOnSubmit;
             RegisterControl.OnRegisterPatient += RegisterPacientOnSubmit;
@@ -64,6 +67,16 @@ namespace WpfAppMedicalSystemsDraft
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
             emailService = new EmailService(settings.SmtpApiKey);          
             DataContext = this;
+
+            
+            
+        }
+
+
+        private void UserControlUsers_CloseClicked(object sender, EventArgs e)
+        {
+            // Handle the close logic here
+            Close();
         }
 
         private static AppSettings? ReadSettings()
@@ -127,6 +140,23 @@ namespace WpfAppMedicalSystemsDraft
         private void AddAppointment_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Umów się na wizytę");
+        }
+
+        private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
+        {
+            ApproveDoctorsControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
+            ApproveDoctorsControl.AddDoctorOverlay.IsOpen = true;
+            
+        }
+
+        private void ManageUsers_Click(object sender, RoutedEventArgs e)
+        {
+            if (ManageUsersControl.IsLoaded() == false)
+            {
+                ManageUsersControl.LoadUsers(medicalSystemsContext.Doctors.ToList(), medicalSystemsContext.Patients.ToList(), medicalSystemsContext.Users.ToList());
+            }
+           
+            ManageUsersControl.ManageUsersOverlay.IsOpen = true;
         }
 
         private void ExitApp_Click(object sender, RoutedEventArgs e)

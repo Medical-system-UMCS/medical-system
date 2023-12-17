@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="WpfAppMedicalSystemsDraft.UserControls.ApproveDoctors"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfAppMedicalSystemsDraft.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+        <Popup x:Name="AddDoctorOverlay" IsOpen="False" Placement="Center">
+            <Border Background="White" BorderBrush="Black" BorderThickness="1" Width="Auto" Height="Auto">
+                <StackPanel>
+                    <TextBlock Text="Potwierdź lekarza" FontWeight="Bold" FontSize="16" Margin="10"/>
+
+                    <!-- Doctors Table -->
+                    <DataGrid x:Name="Table" AutoGenerateColumns="False" CanUserAddRows="False" Width="Auto" Height="Auto" Margin="10"
+                              SelectionChanged="Table_SelectionChanged" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" />
+                            <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}"/>
+                            <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}"/>
+                            <DataGridTextColumn Header="Specjalizacja" Binding="{Binding Specialization}"/>
+                            <DataGridTextColumn Header="Tytuł naukowy" Binding="{Binding ScientificDegree}"/>
+                          
+                            <!-- Add more doctor details as needed -->
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                        <!-- Confirm button -->
+                        <Button x:Name="confirmButton" Content="Potwierdź" Click="ConfirmDoctor_Click" Width="100" Margin="0,0,50,0" IsEnabled="False" Background="Green"/>
+
+                        <!-- Cancel button -->
+                        <Button Content="Anuluj" Click="CancelAddDoctor_Click" Width="100" Background="Red"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>

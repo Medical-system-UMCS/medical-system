@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace WpfAppMedicalSystemsDraft.Enums
 {
     class AccountType
