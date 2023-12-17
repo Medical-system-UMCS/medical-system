@@ -171,12 +171,16 @@ namespace WpfAppMedicalSystemsDraft.Models
                     .HasMaxLength(30)
                     .HasColumnName("account_type");
 
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .HasColumnName("email");
+
                 entity.Property(e => e.Login)
                     .HasMaxLength(50)
                     .HasColumnName("login");
 
                 entity.Property(e => e.Password)
-                    .HasMaxLength(32)
+                    .HasMaxLength(64)
                     .HasColumnName("password");
 
                 entity.Property(e => e.Verified).HasColumnName("verified");

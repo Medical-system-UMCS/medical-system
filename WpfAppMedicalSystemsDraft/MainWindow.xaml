@@ -7,7 +7,6 @@
         xmlns:controls="clr-namespace:WpfAppMedicalSystemsDraft.UserControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="494" Width="800">
-
     <Grid>
         <Menu>
             <MenuItem Header="Menu">
@@ -137,15 +136,15 @@
                         </Style.Triggers>
                     </Style>
                 </MenuItem.Style>
-                <MenuItem Header="Potwierdź lekarza" x:Name="ApproveDoctor" Click="ConfirmDoctor_Click"/>
-                <MenuItem Header="Zarządzaj użytkownikami" x:Name="ManageUsers" Click="ManageUsers_Click"/>
+                <MenuItem Header="Potwierdź lekarza"/>
+                <MenuItem Header="Zarządzaj użytkownikami"/>
             </MenuItem>
         </Menu>
-
+        <controls:Registration x:Name="RegisterControl" Visibility="Collapsed"/>
         <controls:Login x:Name="LoginControl" Visibility="Collapsed"/>
         <controls:ApproveDoctors x:Name="ApproveDoctorsControl"/>
         <controls:ManageUsers x:Name="ManageUsersControl"/>
        
-
+         <controls:DoctorsList x:Name="DoctorsListControl" Visibility="Collapsed"/>
     </Grid>
 </Window>
