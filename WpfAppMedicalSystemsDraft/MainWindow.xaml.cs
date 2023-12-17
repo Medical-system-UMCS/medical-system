@@ -60,8 +60,8 @@ namespace WpfAppMedicalSystemsDraft
             emailService = new EmailService(settings.SmtpApiKey);          
             DataContext = this;
 
-            ApproveDoctorsControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
-            ManageUsersControl.LoadUsers(medicalSystemsContext.Doctors.ToList(), medicalSystemsContext.Patients.ToList());
+            
+            
         }
 
 
@@ -134,15 +134,19 @@ namespace WpfAppMedicalSystemsDraft
 
         private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
         {
+            ApproveDoctorsControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
             ApproveDoctorsControl.AddDoctorOverlay.IsOpen = true;
             
         }
 
         private void ManageUsers_Click(object sender, RoutedEventArgs e)
         {
+            if (ManageUsersControl.IsLoaded() == false)
+            {
+                ManageUsersControl.LoadUsers(medicalSystemsContext.Doctors.ToList(), medicalSystemsContext.Patients.ToList(), medicalSystemsContext.Users.ToList());
+            }
+           
             ManageUsersControl.ManageUsersOverlay.IsOpen = true;
-
-        
         }
 
         private void ExitApp_Click(object sender, RoutedEventArgs e)

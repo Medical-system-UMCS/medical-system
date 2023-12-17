@@ -47,21 +47,15 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
                 Table.Items.Refresh();
             }
-
-            //CancelAddDoctor_Click(sender, e);
         }
 
         private void CancelAddDoctor_Click(object sender, RoutedEventArgs e)
         {
-            //FirstName.Text = String.Empty;
-            //LastName.Text = String.Empty;
-            //SpecializationTextBox.Text = String.Empty;
             AddDoctorOverlay.IsOpen = false;
         }
 
         private void Table_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Enable/disable Confirm button based on whether a row is selected
             confirmButton.IsEnabled = Table.SelectedItems.Count == 1;
         }
 
