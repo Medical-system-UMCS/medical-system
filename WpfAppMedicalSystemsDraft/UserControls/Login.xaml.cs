@@ -30,6 +30,12 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             SubmitLogin();
         }
 
+        public void Prepare()
+        {
+            UsernameTextBox.Clear();
+            PasswordBox.Clear();            
+        }
+
         private void SubmitLogin()
         {
             string username = UsernameTextBox.Text;
