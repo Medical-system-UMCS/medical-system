@@ -51,7 +51,9 @@ namespace WpfAppMedicalSystemsDraft
             InitializeComponent();
             RegisterControl.OnRegisterDoctor += RegisterDoctorOnSubmit;
             RegisterControl.OnRegisterPatient += RegisterPacientOnSubmit;
+            RegisterControl.OnRegisterClose += RegisterClose;
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
+            LoginControl.OnCloseLogin += LoginControlClose;
             DoctorsListControl.OnCloseWindow += DoctorsListClose;
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
             emailService = new EmailService(settings.SmtpApiKey);          
@@ -122,6 +124,11 @@ namespace WpfAppMedicalSystemsDraft
         private void ExitApp_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void RegisterClose()
+        {
+            RegisterControl.Visibility = Visibility.Hidden;
         }
 
         private void RegisterPacientOnSubmit(Patient patient, User user)
@@ -207,6 +214,11 @@ namespace WpfAppMedicalSystemsDraft
                 LogIn.Visibility = Visibility.Collapsed;
                 LogOut.Visibility = Visibility.Visible;
             }
+        }
+
+        private void LoginControlClose()
+        {
+            LoginControl.Visibility = Visibility.Hidden;
         }
 
         private void DoctorsListClose()

@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="500">
 
-    <Grid x:Name="RegisterOverlay">
+    <Grid x:Name="RegisterOverlay" KeyDown="RegisterOverlay_KeyDown">
         <Grid.Background>
             <SolidColorBrush Color="Black" Opacity="0.6"/>
         </Grid.Background>
