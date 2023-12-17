@@ -31,6 +31,16 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         public string SelectedDate { get; set; }
 
 
+        public void Prepare()
+        {
+            FirstNameTextBox.Clear();
+            LastNameTextBox.Clear();
+            EmailTextBox.Clear();
+            PasswordBox.Clear();
+            RepeatPasswordBox.Clear();
+            WeightDegree.Clear();
+            HeightSpecialization.Clear();            
+        }
 
         public void SubmitRegister_Click(object sender, RoutedEventArgs e)
         {
