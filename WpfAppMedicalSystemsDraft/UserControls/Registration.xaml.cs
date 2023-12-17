@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using WpfAppMedicalSystemsDraft.Enums;
 using WpfAppMedicalSystemsDraft.Helpers;
@@ -30,11 +31,25 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         public string SelectedDate { get; set; }
 
 
+        public void Prepare()
+        {
+            FirstNameTextBox.Clear();
+            LastNameTextBox.Clear();
+            EmailTextBox.Clear();
+            PasswordBox.Clear();
+            RepeatPasswordBox.Clear();
+            WeightDegree.Clear();
+            HeightSpecialization.Clear();            
+        }
 
         public void SubmitRegister_Click(object sender, RoutedEventArgs e)
         {
+            SubmitRegister();
+        }
 
-            if(!Regex.IsMatch(FirstNameTextBox.Text, @"^[\p{L}]{3,30}$"))
+        private void SubmitRegister()
+        {
+            if (!Regex.IsMatch(FirstNameTextBox.Text, @"^[\p{L}]{3,30}$"))
             {
                 MessageBox.Show("Podaj poprawne imię!");
                 FirstNameTextBox.Focus();
@@ -43,12 +58,12 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             {
                 MessageBox.Show("Podaj poprawne nazwisko!");
                 LastNameTextBox.Focus();
-            }   
-            else if(!Regex.IsMatch(EmailTextBox.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
+            }
+            else if (!Regex.IsMatch(EmailTextBox.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
             {
                 MessageBox.Show("Podaj poprawny email!");
                 EmailTextBox.Focus();
-            }          
+            }
             else if (!Regex.IsMatch(PasswordBox.Password, @"^[a-zA-Z0-9!@#$%^&]{6,32}$"))
             {
                 MessageBox.Show("Podaj poprawne hasło!");
@@ -58,7 +73,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             {
                 MessageBox.Show("Hasła muszą być jednakowe!");
                 RepeatPasswordBox.Focus();
-            } 
+            }
             else if (typeIsPatient)
             {
                 if (!Regex.IsMatch(WeightDegree.Text, @"^[0-9]{2,3}$"))
@@ -117,7 +132,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                     User user = new User
                     {
                         AccountType = AccountType.DOCTOR,
-                        Login = string.Join('_', PolishLettersHelper.ReplacePolishLetters(doctor.FirstName.Trim().ToLower()), 
+                        Login = string.Join('_', PolishLettersHelper.ReplacePolishLetters(doctor.FirstName.Trim().ToLower()),
                         PolishLettersHelper.ReplacePolishLetters(doctor.LastName.Trim().ToLower())),
                         Password = HashHelper.GenerateHash(PasswordBox.Password),
                         Verified = false,
@@ -125,9 +140,8 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                     };
                     OnRegisterDoctor.Invoke(doctor, user);
                 }
-            } 
+            }
         }
-
 
         public string AccTypeVar1
         {
@@ -174,5 +188,18 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
         public event Action<Doctor, User> OnRegisterDoctor;
         public event Action<Patient, User> OnRegisterPatient;
+        public event Action OnRegisterClose;
+
+        private void RegisterOverlay_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                SubmitRegister();
+            }
+            if (e.Key == Key.Escape)
+            {
+                OnRegisterClose.Invoke();
+            }
+        }
     }
 }

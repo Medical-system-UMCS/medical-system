@@ -47,7 +47,7 @@
                         </Style>
                     </MenuItem.Style>
                 </MenuItem>
-                <MenuItem Header="Wyloguj się" x:Name="LogOut">
+                <MenuItem Header="Wyloguj się" x:Name="LogOut" Click="LogOut_Click">
                     <MenuItem.Style>
                         <Style TargetType="MenuItem">
                             <Style.Triggers>

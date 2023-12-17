@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,6 +11,7 @@ using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,7 +40,10 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string AccountTypeEnum { get; private set; } = AccountType.ADMIN;
+        public string AccountTypeEnum { get; private set; } = AccountType.NOT_LOGGED;
+        private User? currentUser;
+        private Doctor? currentDoctor;
+        private Patient? currentPatient;
         private MedicalSystemsContext medicalSystemsContext;
         private EmailService emailService;
         public MainWindow()
@@ -54,7 +60,9 @@ namespace WpfAppMedicalSystemsDraft
             InitializeComponent();
             RegisterControl.OnRegisterDoctor += RegisterDoctorOnSubmit;
             RegisterControl.OnRegisterPatient += RegisterPacientOnSubmit;
+            RegisterControl.OnRegisterClose += RegisterClose;
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
+            LoginControl.OnCloseLogin += LoginControlClose;
             DoctorsListControl.OnCloseWindow += DoctorsListClose;
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
             emailService = new EmailService(settings.SmtpApiKey);          
@@ -113,11 +121,13 @@ namespace WpfAppMedicalSystemsDraft
 
         public void Login_Click(object sender, RoutedEventArgs e)
         {
+            LoginControl.Prepare();
             LoginControl.Visibility = Visibility.Visible;
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
+            RegisterControl.Prepare();
             RegisterControl.Visibility = Visibility.Visible;
         }
 
@@ -154,6 +164,11 @@ namespace WpfAppMedicalSystemsDraft
             Application.Current.Shutdown();
         }
 
+        private void RegisterClose()
+        {
+            RegisterControl.Visibility = Visibility.Hidden;
+        }
+
         private void RegisterPacientOnSubmit(Patient patient, User user)
         {
             medicalSystemsContext.Users.Add(user);
@@ -161,6 +176,8 @@ namespace WpfAppMedicalSystemsDraft
             patient.UserId = user.Id;
             medicalSystemsContext.Patients.Add(patient);
             medicalSystemsContext.SaveChanges();
+            currentUser = user;
+            currentPatient = patient;
             string fullName = string.Join(' ', patient.FirstName, patient.LastName);
             string[] paramsValue = { user.Login, fullName };
             emailService.SendEmail(user.Email, fullName, EmailType.ACCOUNT_CONFIRMATION, paramsValue);
@@ -181,6 +198,8 @@ namespace WpfAppMedicalSystemsDraft
             doctor.UserId = user.Id;
             medicalSystemsContext.Doctors.Add(doctor);
             medicalSystemsContext.SaveChanges();
+            currentUser = user;
+            currentDoctor = doctor;
             string fullName = string.Join(' ', doctor.FirstName, doctor.LastName);
             string[] paramsValue = { user.Login, fullName };
             emailService.SendEmail(user.Email, fullName, EmailType.DOCTOR_REGISTRATION, paramsValue);
@@ -212,8 +231,15 @@ namespace WpfAppMedicalSystemsDraft
             }
            
             AccountTypeEnum = user.AccountType;
-            LoginControl.Visibility = Visibility.Hidden;
-
+            currentUser = user;
+            LoginControl.Visibility = Visibility.Hidden;           
+            if (AccountTypeEnum == AccountType.DOCTOR)
+            {
+                currentDoctor = medicalSystemsContext.Doctors.First(doctor => doctor.UserId == currentUser.Id);
+            }
+            if (AccountTypeEnum == AccountType.PACIENT) {
+                currentPatient = medicalSystemsContext.Patients.First(patient => patient.UserId == currentUser.Id);                
+            }           
             if (AccountTypeEnum.Equals(AccountType.ADMIN))
             {
                 ManageControl.Visibility = Visibility.Visible;
@@ -239,10 +265,50 @@ namespace WpfAppMedicalSystemsDraft
             }
         }
 
+        private void LoginControlClose()
+        {
+            LoginControl.Visibility = Visibility.Hidden;
+        }
+
         private void DoctorsListClose()
         {
             DoctorsListControl.Visibility = Visibility.Collapsed;
         }
 
+        private void LogOut_Click(object sender, RoutedEventArgs e)
+        {                       
+            MessageBoxResult res = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wyloguj się", MessageBoxButton.YesNo);
+            if (res == MessageBoxResult.Yes)
+            {
+                // wylogowanie
+                currentUser = null;
+                if(AccountTypeEnum.Equals(AccountType.PACIENT))
+                {
+                    currentPatient = null;
+                    Appointments.Visibility = Visibility.Collapsed;
+                    Doctors.Visibility = Visibility.Collapsed;
+                    Register.Visibility = Visibility.Visible;
+                    LogIn.Visibility = Visibility.Visible;
+                    LogOut.Visibility = Visibility.Collapsed;
+                }
+                if (AccountTypeEnum == AccountType.DOCTOR)
+                {
+                    currentDoctor = null;                    
+                    ManageExaminations.Visibility = Visibility.Collapsed;
+                    Doctors.Visibility = Visibility.Collapsed;
+                    Register.Visibility = Visibility.Visible;
+                    LogIn.Visibility = Visibility.Visible;
+                    LogOut.Visibility = Visibility.Collapsed;
+                }
+                if (AccountTypeEnum == AccountType.ADMIN)
+                {
+                    ManageControl.Visibility = Visibility.Collapsed;
+                    Register.Visibility = Visibility.Visible;
+                    LogIn.Visibility = Visibility.Visible;
+                    LogOut.Visibility = Visibility.Collapsed;
+                }
+                AccountTypeEnum = AccountType.NOT_LOGGED;
+            }            
+        }
     }
 }

@@ -27,15 +27,35 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
         public void SubmitLogin_Click(object sender, RoutedEventArgs e)
         {
+            SubmitLogin();
+        }
+
+        public void Prepare()
+        {
+            UsernameTextBox.Clear();
+            PasswordBox.Clear();            
+        }
+
+        private void SubmitLogin()
+        {
             string username = UsernameTextBox.Text;
             string password = PasswordBox.Password;
 
-            //do something with username and password later
-
             OnSubmitLogin.Invoke(username, password);
-
         }
 
         public event Action<string, string> OnSubmitLogin;
+        public event Action OnCloseLogin;
+
+        private void LoginOverlay_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                SubmitLogin();
+            }
+            if(e.Key == Key.Escape) {
+                OnCloseLogin.Invoke();
+            }
+        }
     }
 }
