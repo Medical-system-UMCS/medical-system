@@ -40,7 +40,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string AccountTypeEnum { get; private set; } = AccountType.PACIENT;
+        public string AccountTypeEnum { get; private set; } = AccountType.NOT_LOGGED;
         private User? currentUser;
         private Doctor? currentDoctor;
         private Patient? currentPatient;
@@ -177,13 +177,13 @@ namespace WpfAppMedicalSystemsDraft
 
         private void MakeNewAppointmentOnSubmit(Appointment appointment)
         {
+            appointment.PatientId = currentPatient.Id;
             medicalSystemsContext.Appointments.Add(appointment);
             medicalSystemsContext.SaveChanges(); // Exception throw
 
             //currentUser = ;
             //currentPatient = ;
 
-            appointment.PatientId = currentPatient.Id;
             string fullName = string.Join(' ', currentPatient.FirstName, currentPatient.LastName);
             string[] paramsValue = { currentUser.Login, fullName };
             emailService.SendEmail(currentUser.Email, fullName, EmailType.NEW_APPOINTMENT_CONFIRMATION, paramsValue);
