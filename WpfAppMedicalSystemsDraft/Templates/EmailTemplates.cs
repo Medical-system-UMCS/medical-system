@@ -51,6 +51,25 @@ namespace WpfAppMedicalSystemsDraft.Services
                 }
             });
 
+
+            emailTemplates.Add(EmailType.NEW_APPOINTMENT_CONFIRMATION, new Template
+            {
+                Header = "Potwierdzenie wizyty",
+                Content = @"<html>
+                            <body>
+                                <p>Dzień dobry!</p>
+                                <p>Umówiona wizyta została potwierdzona.</p>
+                                <p>(tutaj dane wizyty)</p>
+                                <p>Z poważaniem,<br>
+                                Administrator systemu medycznego MFII</p>                
+                            </body>
+                        </html>",
+                Params = new()
+                {
+                    { ParamType.LOGIN, "" },
+                    { ParamType.FULL_NAME, "" }
+                }
+            });
             // Dodanie kolejnych wzorców
         }
 

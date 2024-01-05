@@ -147,5 +147,6 @@
         <controls:ManageUsers x:Name="ManageUsersControl"/>
        
          <controls:DoctorsList x:Name="DoctorsListControl" Visibility="Collapsed"/>
+         <controls:NewAppointment x:Name="NewAppointmentControl" Visibility="Collapsed"/>
     </Grid>
 </Window>
