@@ -40,7 +40,7 @@ namespace WpfAppMedicalSystemsDraft
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string AccountTypeEnum { get; private set; } = AccountType.NOT_LOGGED;
+        public string AccountTypeEnum { get; private set; } = AccountType.PACIENT;
         private User? currentUser;
         private Doctor? currentDoctor;
         private Patient? currentPatient;
@@ -64,6 +64,10 @@ namespace WpfAppMedicalSystemsDraft
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
             LoginControl.OnCloseLogin += LoginControlClose;
             DoctorsListControl.OnCloseWindow += DoctorsListClose;
+
+            NewAppointmentControl.OnNewAppointmentClose += NewAppointmentClose;
+            NewAppointmentControl.OnMakeNewAppointment += MakeNewAppointmentOnSubmit;
+
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
             emailService = new EmailService(settings.SmtpApiKey);          
             DataContext = this;
@@ -139,7 +143,9 @@ namespace WpfAppMedicalSystemsDraft
 
         private void AddAppointment_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Umów się na wizytę");
+            //NewAppointmentControl.Prepare();
+            NewAppointmentControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
+            NewAppointmentControl.Visibility = Visibility.Visible;
         }
 
         private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
@@ -167,6 +173,23 @@ namespace WpfAppMedicalSystemsDraft
         private void RegisterClose()
         {
             RegisterControl.Visibility = Visibility.Hidden;
+        }
+
+        private void MakeNewAppointmentOnSubmit(Appointment appointment)
+        {
+            medicalSystemsContext.Appointments.Add(appointment);
+            medicalSystemsContext.SaveChanges(); // Exception throw
+
+            //currentUser = ;
+            //currentPatient = ;
+
+            appointment.PatientId = currentPatient.Id;
+            string fullName = string.Join(' ', currentPatient.FirstName, currentPatient.LastName);
+            string[] paramsValue = { currentUser.Login, fullName };
+            emailService.SendEmail(currentUser.Email, fullName, EmailType.NEW_APPOINTMENT_CONFIRMATION, paramsValue);
+            MessageBox.Show("Czekaj na potwierdzenie od administratora na podany email");
+            NewAppointmentControl.Visibility = Visibility.Collapsed;
+
         }
 
         private void RegisterPacientOnSubmit(Patient patient, User user)
@@ -273,6 +296,11 @@ namespace WpfAppMedicalSystemsDraft
         private void DoctorsListClose()
         {
             DoctorsListControl.Visibility = Visibility.Collapsed;
+        }
+
+        private void NewAppointmentClose()
+        {
+            NewAppointmentControl.Visibility = Visibility.Hidden;
         }
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
