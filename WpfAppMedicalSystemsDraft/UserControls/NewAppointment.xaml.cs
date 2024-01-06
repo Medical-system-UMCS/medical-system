@@ -62,12 +62,14 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             {
                 var random = new Random();
 
+                ComboBoxItem comboBoxItem = (ComboBoxItem)AppointmentTypePicker.SelectedItem;
+
                 Appointment appointment = new Appointment
                 {
                     DoctorId = int.Parse(DoctorPicker.Text.Substring(0, DoctorPicker.Text.IndexOf(" "))),
                     Date = DateTime.Parse(DateOfAppointmentPicker.Text) + TimeSpan.Parse(TimePicker.Text),
                     ExaminRoom = random.Next(1, 10).ToString(),
-                    AppointmentType = AppointmentTypePicker.Text.Trim().ToLower()
+                    AppointmentType = comboBoxItem.Name
                 };
 
                 OnMakeNewAppointment.Invoke(appointment);

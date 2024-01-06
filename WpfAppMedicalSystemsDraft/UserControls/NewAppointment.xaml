@@ -36,8 +36,8 @@
 
                         <TextBlock Text="Typ wizyty:" Grid.Row="1"/>
                         <ComboBox x:Name="AppointmentTypePicker" Grid.Row="2" Margin="0 0 0 10" Padding="5">
-                            <ComboBoxItem>Zwykla wizyta</ComboBoxItem>
-                            <ComboBoxItem>Badanie</ComboBoxItem>
+                            <ComboBoxItem x:Name="zwykla_wizyta">Zwykla wizyta</ComboBoxItem>
+                            <ComboBoxItem x:Name="badanie">Badanie</ComboBoxItem>
                         </ComboBox>
 
                         <TextBlock x:Name="DateOfAppointment" Text="Data wizyty:" Grid.Row="3" Margin="0 7 0 0"/>

@@ -68,6 +68,9 @@ namespace WpfAppMedicalSystemsDraft
             NewAppointmentControl.OnNewAppointmentClose += NewAppointmentClose;
             NewAppointmentControl.OnMakeNewAppointment += MakeNewAppointmentOnSubmit;
 
+            NewExaminationControl.OnCloseExamination += CloseNewExamination;
+            NewExaminationControl.OnSubmitExamination += AddNewExamination;
+
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
             emailService = new EmailService(settings.SmtpApiKey);          
             DataContext = this;
@@ -76,6 +79,17 @@ namespace WpfAppMedicalSystemsDraft
             
         }
 
+        private void AddNewExamination(Examination examination)
+        {
+            medicalSystemsContext.Examinations.Add(examination);
+            medicalSystemsContext.SaveChanges();
+            NewExaminationControl.Visibility = Visibility.Collapsed;
+        }
+
+        private void CloseNewExamination()
+        {
+            NewExaminationControl.Visibility = Visibility.Collapsed;
+        }
 
         private void UserControlUsers_CloseClicked(object sender, EventArgs e)
         {
@@ -177,6 +191,10 @@ namespace WpfAppMedicalSystemsDraft
 
         private void MakeNewAppointmentOnSubmit(Appointment appointment)
         {
+            if (currentPatient == null)
+            {
+                return;
+            }
             appointment.PatientId = currentPatient.Id;
             medicalSystemsContext.Appointments.Add(appointment);
             medicalSystemsContext.SaveChanges(); // Exception throw
@@ -338,5 +356,15 @@ namespace WpfAppMedicalSystemsDraft
                 AccountTypeEnum = AccountType.NOT_LOGGED;
             }            
         }
+
+        private void AddExamination_Click(object sender, RoutedEventArgs e)
+        {
+            var examinations = medicalSystemsContext.Appointments.Where(appointment => appointment.AppointmentType == VisitType.BADANIE).ToList();
+            var patients = medicalSystemsContext.Patients.ToList().Where(patient => examinations.Any(el => el.PatientId == patient.Id)).ToList();
+            NewExaminationControl.LoadAppointmentsWithExaminations(examinations, patients);
+            NewExaminationControl.Visibility = Visibility.Visible;
+        }
+
+
     }
 }
