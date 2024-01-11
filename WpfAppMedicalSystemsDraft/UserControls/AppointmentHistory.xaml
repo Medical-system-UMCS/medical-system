@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="WpfAppMedicalSystemsDraft.UserControls.AppointmentHistory"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfAppMedicalSystemsDraft.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="1000">
+    <Grid x:Name="appointmentHistoryGrid">
+
+        <Grid.Background>
+            <SolidColorBrush Color="Black" Opacity="0.6"/>
+        </Grid.Background>
+
+        <Button Content="Close" Click="CloseButton_Click" HorizontalAlignment="Right" Margin="0,10,10,462" Width="86"/>
+
+        <TextBlock Text="Appointment History" FontWeight="Bold" FontSize="16" Margin="10"/>
+        <DataGrid x:Name="appointmentHistoryDataGrid" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Width="Auto" Height="Auto" Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Appointment ID" Binding="{Binding AppointmentId}" />
+                <DataGridTextColumn Header="Doctor" Binding="{Binding DoctorName}"/>
+                <DataGridTextColumn Header="Patient" Binding="{Binding PatientName}"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding Date}" />
+                <DataGridTextColumn Header="Examination Room" Binding="{Binding ExaminationRoom}" />
+                <DataGridTextColumn Header="Appointment Type" Binding="{Binding AppointmentType}" />
+                <DataGridTextColumn Header="Details" Binding="{Binding Details}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        
+    </Grid>
+</UserControl>

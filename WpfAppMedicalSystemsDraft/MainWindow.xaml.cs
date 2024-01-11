@@ -71,6 +71,8 @@ namespace WpfAppMedicalSystemsDraft
             NewExaminationControl.OnCloseExamination += CloseNewExamination;
             NewExaminationControl.OnSubmitExamination += AddNewExamination;
 
+            NewAppointmentHistory.OnCloseAppointmentHistory += CloseAppointmentHistory;
+
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
             emailService = new EmailService(settings.SmtpApiKey);          
             DataContext = this;
@@ -91,6 +93,10 @@ namespace WpfAppMedicalSystemsDraft
             NewExaminationControl.Visibility = Visibility.Collapsed;
         }
 
+        private void CloseAppointmentHistory()
+        {
+            NewAppointmentHistory.Visibility = Visibility.Collapsed; 
+        }
         private void UserControlUsers_CloseClicked(object sender, EventArgs e)
         {
             // Handle the close logic here
@@ -160,6 +166,15 @@ namespace WpfAppMedicalSystemsDraft
             //NewAppointmentControl.Prepare();
             NewAppointmentControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
             NewAppointmentControl.Visibility = Visibility.Visible;
+        }
+
+        private void AppointmentHistory_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentPatient != null)
+            {
+                NewAppointmentHistory.LoadAppointments(currentPatient.Appointments.ToList());
+                NewAppointmentHistory.Visibility = Visibility.Visible;
+            }
         }
 
         private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
@@ -320,6 +335,8 @@ namespace WpfAppMedicalSystemsDraft
         {
             NewAppointmentControl.Visibility = Visibility.Hidden;
         }
+
+    
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {                       
