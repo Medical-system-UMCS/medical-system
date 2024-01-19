@@ -29,6 +29,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         public void LoadAppointmentsWithExaminations(List<Appointment> appointments, List<Patient> patients)
         {
             ExaminationsList.Items.Clear();
+
             appointments.ForEach(el => {
                 var patient = patients.First(patient => el.PatientId == patient.Id);
                 ExaminationsList.Items.Add(string.Join(' ', el.Id, patient.FirstName, patient.LastName, el.Date));
