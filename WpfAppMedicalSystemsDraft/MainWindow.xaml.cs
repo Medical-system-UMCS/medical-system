@@ -359,9 +359,11 @@ namespace WpfAppMedicalSystemsDraft
 
         private void AddExamination_Click(object sender, RoutedEventArgs e)
         {
-            var examinations = medicalSystemsContext.Appointments.Where(appointment => appointment.AppointmentType == VisitType.BADANIE).ToList();
-            var patients = medicalSystemsContext.Patients.ToList().Where(patient => examinations.Any(el => el.PatientId == patient.Id)).ToList();
-            NewExaminationControl.LoadAppointmentsWithExaminations(examinations, patients);
+            var examinationAppointments = medicalSystemsContext.Appointments.Where(appointment => appointment.AppointmentType == VisitType.BADANIE).ToList();
+            var addedExaminationIds = medicalSystemsContext.Examinations.Select(examination => examination.AppointmentId).ToList();
+            var patients = medicalSystemsContext.Patients.ToList().Where(patient => examinationAppointments.Any(el => el.PatientId == patient.Id)).ToList();
+            examinationAppointments = examinationAppointments.Where(examination => !addedExaminationIds.Contains(examination.Id)).ToList();
+            NewExaminationControl.LoadAppointmentsWithExaminations(examinationAppointments, patients);
             NewExaminationControl.Visibility = Visibility.Visible;
         }
 
