@@ -5,28 +5,30 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfAppMedicalSystemsDraft.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="1000">
+             d:DesignHeight="400" d:DesignWidth="800">
     <Grid x:Name="appointmentHistoryGrid">
+        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="10" Background="White">
+            <StackPanel Margin="10">
+                <!-- Header -->
+                <StackPanel Orientation="Horizontal"  Margin="0,0,0,15">
+                    <TextBlock Text="Lista wizyt" FontWeight="Bold" FontSize="20" HorizontalAlignment="Left"/>
+                    <Button Content="Zamknij" Click="CloseButton_Click" Background="White" Width="80" Height="30" Margin="580,0,0,0"/>
+                </StackPanel>
 
-        <Grid.Background>
-            <SolidColorBrush Color="Black" Opacity="0.6"/>
-        </Grid.Background>
-
-        <Button Content="Close" Click="CloseButton_Click" HorizontalAlignment="Right" Margin="0,10,10,462" Width="86"/>
-
-        <TextBlock Text="Appointment History" FontWeight="Bold" FontSize="16" Margin="10"/>
-        <DataGrid x:Name="appointmentHistoryDataGrid" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Width="Auto" Height="Auto" Margin="10">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Appointment ID" Binding="{Binding AppointmentId}" />
-                <DataGridTextColumn Header="Doctor" Binding="{Binding DoctorName}"/>
-                <DataGridTextColumn Header="Patient" Binding="{Binding PatientName}"/>
-                <DataGridTextColumn Header="Date" Binding="{Binding Date}" />
-                <DataGridTextColumn Header="Examination Room" Binding="{Binding ExaminationRoom}" />
-                <DataGridTextColumn Header="Appointment Type" Binding="{Binding AppointmentType}" />
-                <DataGridTextColumn Header="Details" Binding="{Binding Details}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-
-        
+                <!-- DataGrid -->
+                <DataGrid x:Name="appointmentHistoryDataGrid" ColumnWidth="*" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Width="Auto" Height="Auto" Margin="0,0,0,10" CanUserResizeColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID Wizyty" Binding="{Binding AppointmentId}" />
+                        <DataGridTextColumn Header="Doktor" Binding="{Binding DoctorName}" />
+                        <DataGridTextColumn Header="Pacjent" Binding="{Binding PatientName}" />
+                        <DataGridTextColumn Header="Data" Binding="{Binding Date}" />
+                        <DataGridTextColumn Header="Pokój" Binding="{Binding ExaminationRoom}" />
+                        <DataGridTextColumn Header="Typ wizyty" Binding="{Binding AppointmentType}" />
+                        <DataGridTextColumn Header="Szczegóły" Binding="{Binding Details}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </Border>
     </Grid>
+
 </UserControl>
