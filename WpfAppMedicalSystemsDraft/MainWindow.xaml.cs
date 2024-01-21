@@ -71,6 +71,8 @@ namespace WpfAppMedicalSystemsDraft
             NewExaminationControl.OnCloseExamination += CloseNewExamination;
             NewExaminationControl.OnSubmitExamination += AddNewExamination;
 
+            NewAppointmentHistory.OnCloseAppointmentHistory += CloseAppointmentHistory;
+
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
             emailService = new EmailService(settings.SmtpApiKey);          
             DataContext = this;
@@ -91,6 +93,10 @@ namespace WpfAppMedicalSystemsDraft
             NewExaminationControl.Visibility = Visibility.Collapsed;
         }
 
+        private void CloseAppointmentHistory()
+        {
+            NewAppointmentHistory.Visibility = Visibility.Collapsed; 
+        }
         private void UserControlUsers_CloseClicked(object sender, EventArgs e)
         {
             // Handle the close logic here
@@ -160,6 +166,19 @@ namespace WpfAppMedicalSystemsDraft
             //NewAppointmentControl.Prepare();
             NewAppointmentControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
             NewAppointmentControl.Visibility = Visibility.Visible;
+        }
+
+        private void AppointmentHistory_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentPatient != null)
+            {
+                var appointments = medicalSystemsContext.Appointments.Where(appointment => appointment.PatientId == currentPatient.Id).ToList();
+                var doctors = medicalSystemsContext.Doctors.ToList();
+
+                NewAppointmentHistory.LoadAppointments(appointments, doctors);
+                NewAppointmentHistory.Visibility = Visibility.Visible;
+               
+            }
         }
 
         private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
@@ -321,6 +340,8 @@ namespace WpfAppMedicalSystemsDraft
             NewAppointmentControl.Visibility = Visibility.Hidden;
         }
 
+    
+
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {                       
             MessageBoxResult res = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wyloguj się", MessageBoxButton.YesNo);
@@ -366,7 +387,5 @@ namespace WpfAppMedicalSystemsDraft
             NewExaminationControl.LoadAppointmentsWithExaminations(examinationAppointments, patients);
             NewExaminationControl.Visibility = Visibility.Visible;
         }
-
-
     }
 }
