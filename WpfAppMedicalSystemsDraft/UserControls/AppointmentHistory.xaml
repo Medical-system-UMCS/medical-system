@@ -18,13 +18,10 @@
                 <!-- DataGrid -->
                 <DataGrid x:Name="appointmentHistoryDataGrid" ColumnWidth="*" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Width="Auto" Height="Auto" Margin="0,0,0,10" CanUserResizeColumns="False">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID Wizyty" Binding="{Binding AppointmentId}" />
-                        <DataGridTextColumn Header="Doktor" Binding="{Binding DoctorName}" />
-                        <DataGridTextColumn Header="Pacjent" Binding="{Binding PatientName}" />
-                        <DataGridTextColumn Header="Data" Binding="{Binding Date}" />
-                        <DataGridTextColumn Header="Pokój" Binding="{Binding ExaminationRoom}" />
-                        <DataGridTextColumn Header="Typ wizyty" Binding="{Binding AppointmentType}" />
-                        <DataGridTextColumn Header="Szczegóły" Binding="{Binding Details}" />
+                        <DataGridTextColumn Header="Lekarz" Binding="{Binding doctor}" />
+                        <DataGridTextColumn Header="Data" Binding="{Binding appointment.Date}" />
+                        <DataGridTextColumn Header="Pokój" Binding="{Binding appointment.ExaminRoom}" />
+                        <DataGridTextColumn Header="Typ wizyty" Binding="{Binding appointment.AppointmentType}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>

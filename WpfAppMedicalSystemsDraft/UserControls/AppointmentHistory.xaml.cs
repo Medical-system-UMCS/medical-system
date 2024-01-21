@@ -21,15 +21,44 @@ namespace WpfAppMedicalSystemsDraft.UserControls
     /// </summary>
     public partial class AppointmentHistory : UserControl
     {
+        private class CombinedAppointment
+        {
+            public Appointment appointment { get; set; }
+            public string doctor { get; set; }
+        }
+
+        private List<CombinedAppointment> appointments;
+
         public AppointmentHistory()
         {
             InitializeComponent();
+            appointments = new List<CombinedAppointment>();
         }
 
-        public void LoadAppointments(List<Appointment> appointments)
+        public void LoadAppointments(List<Appointment> appointments, List<Doctor> doctors)
         {
-            appointments.ForEach(appointment => appointmentHistoryDataGrid.Items.Add(appointment));
+            //appointmentHistoryDataGrid.ItemsSource = appointments;
+            //var first = appointments.First();
+
+            //MessageBox.Show(first.Doctor.FirstName);
+            //MessageBox.Show(first.Doctor.LastName);
+
+            foreach (var item in appointments)
+            {
+                Doctor doctor = doctors.Where(doctor => doctor.Id == item.DoctorId).First();
+
+
+                this.appointments.Add(new CombinedAppointment
+                {
+                    appointment = item,
+                    doctor = doctor.FirstName + " " + doctor.LastName
+                });
+            }
+
+            appointmentHistoryDataGrid.ItemsSource = this.appointments;
         }
+
+
 
         public event Action OnCloseAppointmentHistory;
 

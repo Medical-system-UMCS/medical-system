@@ -172,8 +172,12 @@ namespace WpfAppMedicalSystemsDraft
         {
             if (currentPatient != null)
             {
-                NewAppointmentHistory.LoadAppointments(currentPatient.Appointments.ToList());
+                var appointments = medicalSystemsContext.Appointments.Where(appointment => appointment.PatientId == currentPatient.Id).ToList();
+                var doctors = medicalSystemsContext.Doctors.ToList();
+
+                NewAppointmentHistory.LoadAppointments(appointments, doctors);
                 NewAppointmentHistory.Visibility = Visibility.Visible;
+               
             }
         }
 
@@ -383,7 +387,5 @@ namespace WpfAppMedicalSystemsDraft
             NewExaminationControl.LoadAppointmentsWithExaminations(examinationAppointments, patients);
             NewExaminationControl.Visibility = Visibility.Visible;
         }
-
-
     }
 }
