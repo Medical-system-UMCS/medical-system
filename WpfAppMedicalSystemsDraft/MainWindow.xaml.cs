@@ -65,6 +65,8 @@ namespace WpfAppMedicalSystemsDraft
             LoginControl.OnCloseLogin += LoginControlClose;
             DoctorsListControl.OnCloseWindow += DoctorsListClose;
 
+            ApproveDoctorsControl.OnCloseApproveDoctors += ApproveDoctorsClose;
+
             NewAppointmentControl.OnNewAppointmentClose += NewAppointmentClose;
             NewAppointmentControl.OnMakeNewAppointment += MakeNewAppointmentOnSubmit;
 
@@ -79,6 +81,23 @@ namespace WpfAppMedicalSystemsDraft
 
             
             
+        }
+
+        private void ApproveDoctorsClose(List<Doctor> approvedDoctors)
+        {
+            var ids = approvedDoctors.Select(doctor => doctor.UserId).ToList();
+            foreach (var id in ids)
+            {
+                var doctor = medicalSystemsContext.Users.Where(user => user.Id == id).FirstOrDefault();
+                if (doctor == null)
+                {
+                    continue;
+                }
+                doctor.Verified = true;
+                medicalSystemsContext.Users.Update(doctor);              
+            }          
+            medicalSystemsContext.SaveChanges();
+            ApproveDoctorsControl.AddDoctorOverlay.IsOpen = false;
         }
 
         private void AddNewExamination(Examination examination)
@@ -183,7 +202,8 @@ namespace WpfAppMedicalSystemsDraft
 
         private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
         {
-            ApproveDoctorsControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
+            var idsOfDoctor = medicalSystemsContext.Users.Where(user => user.AccountType == AccountType.DOCTOR && !user.Verified).Select(user => user.Id).ToList();
+            ApproveDoctorsControl.LoadDoctors(medicalSystemsContext.Doctors.Where(doctor => idsOfDoctor.Contains(doctor.UserId)).ToList());
             ApproveDoctorsControl.AddDoctorOverlay.IsOpen = true;
             
         }
