@@ -27,8 +27,6 @@ using WpfAppMedicalSystemsDraft.Helpers;
 using WpfAppMedicalSystemsDraft.Models;
 using WpfAppMedicalSystemsDraft.Services;
 using WpfAppMedicalSystemsDraft.UserControls;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 using System.Reflection.Metadata;
 using System.Windows.Automation;
 using System.Xml.Linq;
@@ -211,67 +209,8 @@ namespace WpfAppMedicalSystemsDraft
             }
             else
             {
-
-                string dateNoSpaces = date.Replace(" ", "");
-                dateNoSpaces = dateNoSpaces.Substring(0, dateNoSpaces.Length - 8);
-                string filePath = "WynikiBadań_" + dateNoSpaces + ".pdf";
-
-                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    using (iTextSharp.text.Document examinationRestults = new iTextSharp.text.Document())
-                    {
-                        PdfWriter.GetInstance(examinationRestults, fileStream);
-                        examinationRestults.Open();
-
-                        Font headline = FontFactory.GetFont(FontFactory.HELVETICA, 20, Font.NORMAL);
-                        Font boldFont = FontFactory.GetFont(FontFactory.HELVETICA, 12, Font.BOLD);
-
-                        iTextSharp.text.Paragraph headlineParagraph = new iTextSharp.text.Paragraph("WYNIKI BADAN", headline);
-                        headlineParagraph.Alignment = Element.ALIGN_CENTER;
-                        examinationRestults.Add(headlineParagraph);
-                        examinationRestults.Add(new iTextSharp.text.Paragraph(" "));
-                        examinationRestults.Add(new iTextSharp.text.Paragraph(" "));
-                        examinationRestults.Add(new iTextSharp.text.Paragraph(" "));
-                        examinationRestults.Add(new iTextSharp.text.Paragraph(" "));
-
-                        iTextSharp.text.Paragraph patientParagraph = new iTextSharp.text.Paragraph();
-                        patientParagraph.Add(new Chunk("Pacjent: ", boldFont));
-                        patientParagraph.Add(new Chunk(currentPatient.FirstName + " " + currentPatient.LastName));
-                        examinationRestults.Add(patientParagraph);
-                        examinationRestults.Add(new iTextSharp.text.Paragraph(" "));
-
-                        iTextSharp.text.Paragraph doctorParagraph = new iTextSharp.text.Paragraph();
-                        doctorParagraph.Add(new Chunk("Lekarz: ", boldFont));
-                        doctorParagraph.Add(new Chunk(doctorData.FirstName + " " + doctorData.LastName));
-                        examinationRestults.Add(doctorParagraph);
-                        examinationRestults.Add(new iTextSharp.text.Paragraph(" "));
-
-                        iTextSharp.text.Paragraph dateParagraph = new iTextSharp.text.Paragraph();
-                        dateParagraph.Add(new Chunk("Data i godzina wizyty: ", boldFont));
-                        dateParagraph.Add(new Chunk(date));
-                        examinationRestults.Add(dateParagraph);
-                        examinationRestults.Add(new iTextSharp.text.Paragraph(" "));
-
-                        iTextSharp.text.Paragraph symptomsParagraph = new iTextSharp.text.Paragraph();
-                        symptomsParagraph.Add(new Chunk("Objawy: ", boldFont));
-                        symptomsParagraph.Add(new Chunk(examinationToDownload.Symptoms));
-                        examinationRestults.Add(symptomsParagraph);
-                        examinationRestults.Add(new iTextSharp.text.Paragraph(" "));
-
-                        iTextSharp.text.Paragraph diagnosisParagraph = new iTextSharp.text.Paragraph();
-                        diagnosisParagraph.Add(new Chunk("Diagnoza: ", boldFont));
-                        diagnosisParagraph.Add(new Chunk(examinationToDownload.Diagnosis));
-                        examinationRestults.Add(diagnosisParagraph);
-                        examinationRestults.Add(new iTextSharp.text.Paragraph(" "));
-
-                        iTextSharp.text.Paragraph treatmentParagraph = new iTextSharp.text.Paragraph();
-                        treatmentParagraph.Add(new Chunk("Lecznie: ", boldFont));
-                        treatmentParagraph.Add(new Chunk(examinationToDownload.Treatment));
-                        examinationRestults.Add(treatmentParagraph);
-                        examinationRestults.Add(new iTextSharp.text.Paragraph(" "));
-
-                    }
-                }
+                PdfGenerator pdfGenerator = new PdfGenerator();
+                pdfGenerator.GeneratePdf(currentPatient, doctorData, date, examinationToDownload);
             }
         }
 
