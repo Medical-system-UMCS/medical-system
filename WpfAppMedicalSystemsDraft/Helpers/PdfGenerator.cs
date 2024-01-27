@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Windows;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +12,7 @@ using iText.Layout.Element;
 using iText.IO.Font.Constants;
 using WpfAppMedicalSystemsDraft.Models;
 
-namespace WpfAppMedicalSystemsDraft.UserControls
+namespace WpfAppMedicalSystemsDraft.Helpers
 {
     public class PdfGenerator
     {
@@ -20,14 +22,13 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             string dateNoSpaces = date.Replace(" ", "");
             dateNoSpaces = dateNoSpaces.Substring(0, dateNoSpaces.Length - 8);
             string filename = "WynikiBadań_" + dateNoSpaces + ".pdf";
-
-            PdfFont fontHelvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+            string downloadsFolder =  Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "/Downloads/" + filename;
 
             PdfFont fontArial = PdfFontFactory.CreateFont(@"C:\Windows\Fonts\Arial.ttf");
             PdfFont fontArialBold = PdfFontFactory.CreateFont(@"C:\Windows\Fonts\Arialbd.ttf");
 
 
-            using (PdfWriter writer = new PdfWriter(filename))
+            using (PdfWriter writer = new PdfWriter(downloadsFolder))
             {
                 using (PdfDocument pdf = new PdfDocument(writer))
                 {
@@ -35,7 +36,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
                     document.SetFont(fontArial);
 
-                    
+
                     Paragraph headline = new Paragraph("WYNIKI BADAŃ").SetFontSize(20).SetFont(fontArial);
                     headline.SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER);
                     headline.SetMarginTop(40);
@@ -77,6 +78,5 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                 }
             }
         }
-
     }
 }

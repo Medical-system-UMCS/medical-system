@@ -26,7 +26,6 @@ using WpfAppMedicalSystemsDraft.Enums;
 using WpfAppMedicalSystemsDraft.Helpers;
 using WpfAppMedicalSystemsDraft.Models;
 using WpfAppMedicalSystemsDraft.Services;
-using WpfAppMedicalSystemsDraft.UserControls;
 using System.Reflection.Metadata;
 using System.Windows.Automation;
 using System.Xml.Linq;
