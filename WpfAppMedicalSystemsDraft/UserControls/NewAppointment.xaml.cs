@@ -74,8 +74,6 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
                 OnMakeNewAppointment.Invoke(appointment);
 
-                //MessageBox.Show("DoctorID: " + appointment.DoctorId.ToString() + "\nTermin: " + appointment.Date.ToString() + "\nPokój: " + appointment.ExaminRoom.ToString() +
-                //                "\nTyp: " + appointment.AppointmentType.ToString(), "Dane Wizyty");
             } 
         }
 

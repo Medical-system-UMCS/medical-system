@@ -99,7 +99,7 @@
                 </MenuItem.Style>
                 <MenuItem Header="Umów wizytę" Click="AddAppointment_Click"/>
                 <MenuItem Header="Historia wizyt" Click="AppointmentHistory_Click"/>
-                <MenuItem Header="Wyniki badań"/>
+                <MenuItem Header="Wyniki badań" Click="ExaminationResult_Click"/>
             </MenuItem>
             <MenuItem Header="Zarządzanie badaniami" x:Name="ManageExaminations">
                 <MenuItem.Style>
@@ -149,7 +149,7 @@
         <controls:DoctorsList x:Name="DoctorsListControl" Visibility="Collapsed"/>
         <controls:NewAppointment x:Name="NewAppointmentControl" Visibility="Collapsed"/>
         <controls:AddExamination x:Name="NewExaminationControl" Visibility="Collapsed"/>
-
+        <controls:ExaminationResult x:Name="ExaminationResultControl" Visibility="Collapsed"/>
         <controls:AppointmentHistory x:Name="NewAppointmentHistory" Visibility="Collapsed"/>
     </Grid>
 </Window>

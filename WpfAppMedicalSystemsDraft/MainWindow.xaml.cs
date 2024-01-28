@@ -26,7 +26,10 @@ using WpfAppMedicalSystemsDraft.Enums;
 using WpfAppMedicalSystemsDraft.Helpers;
 using WpfAppMedicalSystemsDraft.Models;
 using WpfAppMedicalSystemsDraft.Services;
-using WpfAppMedicalSystemsDraft.UserControls;
+using System.Reflection.Metadata;
+using System.Windows.Automation;
+using System.Xml.Linq;
+
 
 namespace WpfAppMedicalSystemsDraft
 {
@@ -73,6 +76,8 @@ namespace WpfAppMedicalSystemsDraft
             NewExaminationControl.OnCloseExamination += CloseNewExamination;
             NewExaminationControl.OnSubmitExamination += AddNewExamination;
 
+            ExaminationResultControl.OnExaminationResultClose += ExaminationResultClose;
+            ExaminationResultControl.OnDownloadExaminationResult += DownloadExaminationResult;
             NewAppointmentHistory.OnCloseAppointmentHistory += CloseAppointmentHistory;
 
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
@@ -228,6 +233,28 @@ namespace WpfAppMedicalSystemsDraft
             RegisterControl.Visibility = Visibility.Hidden;
         }
 
+        private void DownloadExaminationResult(int id, string date)
+        {
+
+            Examination? examinationToDownload = medicalSystemsContext.Examinations.FirstOrDefault(e => e.AppointmentId == id);          
+            if (currentPatient == null)
+            {
+                return;
+            }
+            if (examinationToDownload == null)
+            {
+                MessageBox.Show("Nie ma jeszcze wyników badań!", "Alert");
+            }
+            else
+            {
+                Appointment appointmentData = medicalSystemsContext.Appointments.First(e => e.Id == id);
+                Doctor doctorData = medicalSystemsContext.Doctors.First(e => e.Id == appointmentData.DoctorId);
+                PdfGenerator pdfGenerator = new PdfGenerator();
+                pdfGenerator.GeneratePdf(currentPatient, doctorData, date, examinationToDownload);
+                
+            }
+        }
+
         private void MakeNewAppointmentOnSubmit(Appointment appointment)
         {
             if (currentPatient == null)
@@ -360,7 +387,10 @@ namespace WpfAppMedicalSystemsDraft
             NewAppointmentControl.Visibility = Visibility.Hidden;
         }
 
-    
+        private void ExaminationResultClose()
+        {
+            ExaminationResultControl.Visibility = Visibility.Hidden;
+        }
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {                       
@@ -407,5 +437,14 @@ namespace WpfAppMedicalSystemsDraft
             NewExaminationControl.LoadAppointmentsWithExaminations(examinationAppointments, patients);
             NewExaminationControl.Visibility = Visibility.Visible;
         }
+
+        private void ExaminationResult_Click(object sender, RoutedEventArgs e)
+        {
+            var examinations = medicalSystemsContext.Appointments.Where(appointment => appointment.AppointmentType == VisitType.BADANIE && appointment.PatientId == currentPatient.Id).ToList();
+            var patients = medicalSystemsContext.Patients.ToList().Where(patient => examinations.Any(el => el.PatientId == patient.Id)).ToList();
+            ExaminationResultControl.LoadAppointments(examinations, patients);
+            ExaminationResultControl.Visibility = Visibility.Visible;
+        }
+
     }
 }
