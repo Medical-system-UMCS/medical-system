@@ -236,18 +236,22 @@ namespace WpfAppMedicalSystemsDraft
         private void DownloadExaminationResult(int id, string date)
         {
 
-            Examination examinationToDownload = medicalSystemsContext.Examinations.FirstOrDefault(e => e.AppointmentId == id);
-            Appointment appointmentData = medicalSystemsContext.Appointments.FirstOrDefault(e => e.Id == id);
-            Doctor doctorData = medicalSystemsContext.Doctors.FirstOrDefault(e => e.Id == appointmentData.DoctorId);
-
+            Examination? examinationToDownload = medicalSystemsContext.Examinations.FirstOrDefault(e => e.AppointmentId == id);          
+            if (currentPatient == null)
+            {
+                return;
+            }
             if (examinationToDownload == null)
             {
                 MessageBox.Show("Nie ma jeszcze wyników badań!", "Alert");
             }
             else
             {
+                Appointment appointmentData = medicalSystemsContext.Appointments.First(e => e.Id == id);
+                Doctor doctorData = medicalSystemsContext.Doctors.First(e => e.Id == appointmentData.DoctorId);
                 PdfGenerator pdfGenerator = new PdfGenerator();
                 pdfGenerator.GeneratePdf(currentPatient, doctorData, date, examinationToDownload);
+                
             }
         }
 

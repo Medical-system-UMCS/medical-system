@@ -30,8 +30,7 @@ namespace WpfAppMedicalSystemsDraft.Helpers
             {
                 return;
             }            
-            filename = string.Join('/', folderDialog.FileName, filename);
-            MessageBox.Show(filename);
+            filename = string.Join(@"\", folderDialog.FileName, filename);
             PdfFont fontArial = PdfFontFactory.CreateFont(@"C:\Windows\Fonts\Arial.ttf");
             PdfFont fontArialBold = PdfFontFactory.CreateFont(@"C:\Windows\Fonts\Arialbd.ttf");
 
@@ -83,6 +82,7 @@ namespace WpfAppMedicalSystemsDraft.Helpers
 
 
                     document.Close();
+                    MessageBox.Show($"Wyniki zostały zapisane ({filename})");
                 }
             }
         }

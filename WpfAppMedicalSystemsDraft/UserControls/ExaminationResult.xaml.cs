@@ -26,15 +26,6 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             DataContext = this;
         }
 
-        /*
-        public void LoadAppointments(List<Appointment> appointment)
-        {
-            AppointmentList.Items.Clear();
-            appointment.ForEach(appointment => AppointmentList.Items.Add(appointment.Date));
-        }
-        */
-
-
         
         public void LoadAppointments(List<Appointment> appointments, List<Patient> patients)
         {
@@ -53,8 +44,6 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
         public void SubmitDownload()
         {
-            //OnCloseNewAppointment.Invoke();
-
             if (AppointmentList.SelectedItem == null)
             {
                 MessageBox.Show("Wybierz wizytę", "Alert");
@@ -63,8 +52,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             {
 
                 int appointmentID = int.Parse(AppointmentList.Text.Substring(0, AppointmentList.Text.IndexOf(" ")));
-                string appointmentDate = AppointmentList.Text.Substring(appointmentID.ToString().Length + 7);
-                //MessageBox.Show(appointmentID.ToString() + " " + appointmentDate.ToString(), "Alert");
+                string appointmentDate = AppointmentList.Text.Substring(appointmentID.ToString().Length + 7);       
 
                 OnDownloadExaminationResult.Invoke(appointmentID, appointmentDate);
             }
