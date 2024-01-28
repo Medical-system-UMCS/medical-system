@@ -145,6 +145,7 @@ namespace WpfAppMedicalSystemsDraft
         {
             //NewAppointmentControl.Prepare();
             NewAppointmentControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
+            NewAppointmentControl.LoadDateTime(medicalSystemsContext.Appointments.ToList());
             NewAppointmentControl.Visibility = Visibility.Visible;
         }
 
