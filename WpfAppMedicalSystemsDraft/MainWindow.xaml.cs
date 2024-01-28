@@ -68,6 +68,8 @@ namespace WpfAppMedicalSystemsDraft
             LoginControl.OnCloseLogin += LoginControlClose;
             DoctorsListControl.OnCloseWindow += DoctorsListClose;
 
+            ApproveDoctorsControl.OnCloseApproveDoctors += ApproveDoctorsClose;
+
             NewAppointmentControl.OnNewAppointmentClose += NewAppointmentClose;
             NewAppointmentControl.OnMakeNewAppointment += MakeNewAppointmentOnSubmit;
 
@@ -76,6 +78,7 @@ namespace WpfAppMedicalSystemsDraft
 
             ExaminationResultControl.OnExaminationResultClose += ExaminationResultClose;
             ExaminationResultControl.OnDownloadExaminationResult += DownloadExaminationResult;
+            NewAppointmentHistory.OnCloseAppointmentHistory += CloseAppointmentHistory;
 
             medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
             emailService = new EmailService(settings.SmtpApiKey);          
@@ -83,6 +86,23 @@ namespace WpfAppMedicalSystemsDraft
 
             
             
+        }
+
+        private void ApproveDoctorsClose(List<Doctor> approvedDoctors)
+        {
+            var ids = approvedDoctors.Select(doctor => doctor.UserId).ToList();
+            foreach (var id in ids)
+            {
+                var doctor = medicalSystemsContext.Users.Where(user => user.Id == id).FirstOrDefault();
+                if (doctor == null)
+                {
+                    continue;
+                }
+                doctor.Verified = true;
+                medicalSystemsContext.Users.Update(doctor);              
+            }          
+            medicalSystemsContext.SaveChanges();
+            ApproveDoctorsControl.AddDoctorOverlay.IsOpen = false;
         }
 
         private void AddNewExamination(Examination examination)
@@ -97,6 +117,10 @@ namespace WpfAppMedicalSystemsDraft
             NewExaminationControl.Visibility = Visibility.Collapsed;
         }
 
+        private void CloseAppointmentHistory()
+        {
+            NewAppointmentHistory.Visibility = Visibility.Collapsed; 
+        }
         private void UserControlUsers_CloseClicked(object sender, EventArgs e)
         {
             // Handle the close logic here
@@ -168,9 +192,23 @@ namespace WpfAppMedicalSystemsDraft
             NewAppointmentControl.Visibility = Visibility.Visible;
         }
 
+        private void AppointmentHistory_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentPatient != null)
+            {
+                var appointments = medicalSystemsContext.Appointments.Where(appointment => appointment.PatientId == currentPatient.Id).ToList();
+                var doctors = medicalSystemsContext.Doctors.ToList();
+
+                NewAppointmentHistory.LoadAppointments(appointments, doctors);
+                NewAppointmentHistory.Visibility = Visibility.Visible;
+               
+            }
+        }
+
         private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
         {
-            ApproveDoctorsControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
+            var idsOfDoctor = medicalSystemsContext.Users.Where(user => user.AccountType == AccountType.DOCTOR && !user.Verified).Select(user => user.Id).ToList();
+            ApproveDoctorsControl.LoadDoctors(medicalSystemsContext.Doctors.Where(doctor => idsOfDoctor.Contains(doctor.UserId)).ToList());
             ApproveDoctorsControl.AddDoctorOverlay.IsOpen = true;
             
         }
@@ -388,9 +426,11 @@ namespace WpfAppMedicalSystemsDraft
 
         private void AddExamination_Click(object sender, RoutedEventArgs e)
         {
-            var examinations = medicalSystemsContext.Appointments.Where(appointment => appointment.AppointmentType == VisitType.BADANIE).ToList();
-            var patients = medicalSystemsContext.Patients.ToList().Where(patient => examinations.Any(el => el.PatientId == patient.Id)).ToList();
-            NewExaminationControl.LoadAppointmentsWithExaminations(examinations, patients);
+            var examinationAppointments = medicalSystemsContext.Appointments.Where(appointment => appointment.AppointmentType == VisitType.BADANIE).ToList();
+            var addedExaminationIds = medicalSystemsContext.Examinations.Select(examination => examination.AppointmentId).ToList();
+            var patients = medicalSystemsContext.Patients.ToList().Where(patient => examinationAppointments.Any(el => el.PatientId == patient.Id)).ToList();
+            examinationAppointments = examinationAppointments.Where(examination => !addedExaminationIds.Contains(examination.Id)).ToList();
+            NewExaminationControl.LoadAppointmentsWithExaminations(examinationAppointments, patients);
             NewExaminationControl.Visibility = Visibility.Visible;
         }
 
@@ -401,7 +441,6 @@ namespace WpfAppMedicalSystemsDraft
             ExaminationResultControl.LoadAppointments(examinations, patients);
             ExaminationResultControl.Visibility = Visibility.Visible;
         }
-
 
     }
 }

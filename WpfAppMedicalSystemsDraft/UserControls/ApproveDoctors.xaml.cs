@@ -23,35 +23,41 @@ namespace WpfAppMedicalSystemsDraft.UserControls
     /// </summary>
     public partial class ApproveDoctors : UserControl
     {
-        public List<Doctor> ApprovedDoctors { get; set; }
+        public List<Doctor> Doctors { get; set; }
+        private List<Doctor> approvedDoctors { get; set; } = new List<Doctor>();
+
+        public event Action<List<Doctor>> OnCloseApproveDoctors;
+
         public ApproveDoctors()
         {
             InitializeComponent();
             
 
-            Table.ItemsSource = ApprovedDoctors; 
+            Table.ItemsSource = Doctors; 
         }
 
         public void LoadDoctors(List<Doctor> doctors)
         {
-            ApprovedDoctors = new List<Doctor>(doctors);
+            this.Doctors = new List<Doctor>(doctors);
 
-            Table.ItemsSource = ApprovedDoctors;
+            Table.ItemsSource = this.Doctors;
         }
 
         private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
         {
             if (Table.SelectedItem is Doctor selectedDoctor)
             {
-                ApprovedDoctors.Remove(selectedDoctor);
 
+                Doctors.Remove(selectedDoctor);
+                approvedDoctors.Add(selectedDoctor);
                 Table.Items.Refresh();
             }
         }
 
         private void CancelAddDoctor_Click(object sender, RoutedEventArgs e)
         {
-            AddDoctorOverlay.IsOpen = false;
+            OnCloseApproveDoctors.Invoke(approvedDoctors);
+            
         }
 
         private void Table_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -61,7 +67,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
         public List<Doctor> GetApprovedDoctors()
         {
-            return ApprovedDoctors;
+            return Doctors;
         }
     }
 }
