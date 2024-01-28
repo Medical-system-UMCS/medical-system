@@ -26,6 +26,9 @@ using WpfAppMedicalSystemsDraft.Enums;
 using WpfAppMedicalSystemsDraft.Helpers;
 using WpfAppMedicalSystemsDraft.Models;
 using WpfAppMedicalSystemsDraft.Services;
+using System.Reflection.Metadata;
+using System.Windows.Automation;
+using System.Xml.Linq;
 using WpfAppMedicalSystemsDraft.UserControls;
 
 namespace WpfAppMedicalSystemsDraft
@@ -64,13 +67,71 @@ namespace WpfAppMedicalSystemsDraft
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
             LoginControl.OnCloseLogin += LoginControlClose;
             DoctorsListControl.OnCloseWindow += DoctorsListClose;
+
             ManageUsersControl.OnCloseWindow += ManageUsersClose;
-            medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
-            emailService = new EmailService(settings.SmtpApiKey);
+
+            AppointmentListControl.OnCloseAppointmentList += AppointmentListClose;
+            ApproveDoctorsControl.OnCloseApproveDoctors += ApproveDoctorsClose;
+
+            NewAppointmentControl.OnNewAppointmentClose += NewAppointmentClose;
+            NewAppointmentControl.OnMakeNewAppointment += MakeNewAppointmentOnSubmit;
+
+            NewExaminationControl.OnCloseExamination += CloseNewExamination;
+            NewExaminationControl.OnSubmitExamination += AddNewExamination;
+
+            ExaminationResultControl.OnExaminationResultClose += ExaminationResultClose;
+            ExaminationResultControl.OnDownloadExaminationResult += DownloadExaminationResult;
+            NewAppointmentHistory.OnCloseAppointmentHistory += CloseAppointmentHistory;
+
+            medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
+            emailService = new EmailService(settings.SmtpApiKey);          
+
             DataContext = this;
         }
 
+        private void AppointmentListClose()
+        {
+            AppointmentListControl.Visibility = Visibility.Collapsed;
+        }
 
+        private void ApproveDoctorsClose(List<Doctor> approvedDoctors)
+        {
+            var ids = approvedDoctors.Select(doctor => doctor.UserId).ToList();
+            foreach (var id in ids)
+            {
+                var doctor = medicalSystemsContext.Users.Where(user => user.Id == id).FirstOrDefault();
+                if (doctor == null)
+                {
+                    continue;
+                }
+                doctor.Verified = true;
+                medicalSystemsContext.Users.Update(doctor);
+            }
+            medicalSystemsContext.SaveChanges();
+            ApproveDoctorsControl.AddDoctorOverlay.IsOpen = false;
+        }
+
+        private void AddNewExamination(Examination examination)
+        {
+            medicalSystemsContext.Examinations.Add(examination);
+            medicalSystemsContext.SaveChanges();
+            Appointment appointment = medicalSystemsContext.Appointments.First(appointment => examination.AppointmentId == appointment.Id);
+            Patient patient = medicalSystemsContext.Patients.First(patient => patient.Id == appointment.PatientId);
+            User user = medicalSystemsContext.Users.First(user => user.Id == patient.UserId);
+            string[] paramsValue = { $"Wizyta: {appointment.Date}" };
+            emailService.SendEmail(user.Email, string.Join(' ', patient.FirstName, patient.LastName), EmailType.EXAMINATION_RESULT, paramsValue);
+            NewExaminationControl.Visibility = Visibility.Collapsed;
+        }
+
+        private void CloseNewExamination()
+        {
+            NewExaminationControl.Visibility = Visibility.Collapsed;
+        }
+
+        private void CloseAppointmentHistory()
+        {
+            NewAppointmentHistory.Visibility = Visibility.Collapsed;
+        }
         private void UserControlUsers_CloseClicked(object sender, EventArgs e)
         {
             // Handle the close logic here
@@ -137,12 +198,39 @@ namespace WpfAppMedicalSystemsDraft
 
         private void AddAppointment_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Umów się na wizytę");
+            //NewAppointmentControl.Prepare();
+            NewAppointmentControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
+            NewAppointmentControl.Visibility = Visibility.Visible;
+        }
+        private void AppointmentList_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentDoctor != null)
+            {
+                var appointments = medicalSystemsContext.Appointments.Where(appointment => appointment.DoctorId == currentDoctor.Id).ToList();
+                var patients = medicalSystemsContext.Patients.ToList();
+
+                AppointmentListControl.LoadAppointments(appointments, patients);
+                AppointmentListControl.Visibility = Visibility.Visible;
+
+            }
+        }
+        private void AppointmentHistory_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentPatient != null)
+            {
+                var appointments = medicalSystemsContext.Appointments.Where(appointment => appointment.PatientId == currentPatient.Id).ToList();
+                var doctors = medicalSystemsContext.Doctors.ToList();
+
+                NewAppointmentHistory.LoadAppointments(appointments, doctors);
+                NewAppointmentHistory.Visibility = Visibility.Visible;
+
+            }
         }
 
         private void ConfirmDoctor_Click(object sender, RoutedEventArgs e)
         {
-            ApproveDoctorsControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
+            var idsOfDoctor = medicalSystemsContext.Users.Where(user => user.AccountType == AccountType.DOCTOR && !user.Verified).Select(user => user.Id).ToList();
+            ApproveDoctorsControl.LoadDoctors(medicalSystemsContext.Doctors.Where(doctor => idsOfDoctor.Contains(doctor.UserId)).ToList());
             ApproveDoctorsControl.AddDoctorOverlay.IsOpen = true;
 
         }
@@ -183,6 +271,45 @@ namespace WpfAppMedicalSystemsDraft
         private void RegisterClose()
         {
             RegisterControl.Visibility = Visibility.Hidden;
+        }
+
+        private void DownloadExaminationResult(int id, string date)
+        {
+
+            Examination? examinationToDownload = medicalSystemsContext.Examinations.FirstOrDefault(e => e.AppointmentId == id);
+            if (currentPatient == null)
+            {
+                return;
+            }
+            if (examinationToDownload == null)
+            {
+                MessageBox.Show("Nie ma jeszcze wyników badań!", "Alert");
+            }
+            else
+            {
+                Appointment appointmentData = medicalSystemsContext.Appointments.First(e => e.Id == id);
+                Doctor doctorData = medicalSystemsContext.Doctors.First(e => e.Id == appointmentData.DoctorId);
+                PdfGenerator pdfGenerator = new PdfGenerator();
+                pdfGenerator.GeneratePdf(currentPatient, doctorData, date, examinationToDownload);
+            }
+        }
+
+        private void MakeNewAppointmentOnSubmit(Appointment appointment)
+        {
+            if (currentPatient == null || currentUser == null)
+            {
+                return;
+            }
+            appointment.PatientId = currentPatient.Id;
+            medicalSystemsContext.Appointments.Add(appointment);
+            medicalSystemsContext.SaveChanges();
+
+            string fullName = string.Join(' ', currentPatient.FirstName, currentPatient.LastName);
+            string[] paramsValue = { currentUser.Login, fullName };
+            emailService.SendEmail(currentUser.Email, fullName, EmailType.NEW_APPOINTMENT_CONFIRMATION, paramsValue);
+            MessageBox.Show("Czekaj na potwierdzenie wizyty na podany email");
+            NewAppointmentControl.Visibility = Visibility.Collapsed;
+
         }
 
         private void RegisterPacientOnSubmit(Patient patient, User user)
@@ -292,12 +419,21 @@ namespace WpfAppMedicalSystemsDraft
             DoctorsListControl.Visibility = Visibility.Collapsed;
         }
 
+        private void NewAppointmentClose()
+        {
+            NewAppointmentControl.Visibility = Visibility.Hidden;
+        }
+
+        private void ExaminationResultClose()
+        {
+            ExaminationResultControl.Visibility = Visibility.Hidden;
+        }
+
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult res = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wyloguj się", MessageBoxButton.YesNo);
             if (res == MessageBoxResult.Yes)
             {
-                // wylogowanie
                 currentUser = null;
                 if (AccountTypeEnum.Equals(AccountType.PACIENT))
                 {
@@ -327,5 +463,24 @@ namespace WpfAppMedicalSystemsDraft
                 AccountTypeEnum = AccountType.NOT_LOGGED;
             }
         }
+
+        private void AddExamination_Click(object sender, RoutedEventArgs e)
+        {
+            var examinationAppointments = medicalSystemsContext.Appointments.Where(appointment => appointment.AppointmentType == VisitType.BADANIE).ToList();
+            var addedExaminationIds = medicalSystemsContext.Examinations.Select(examination => examination.AppointmentId).ToList();
+            var patients = medicalSystemsContext.Patients.ToList().Where(patient => examinationAppointments.Any(el => el.PatientId == patient.Id)).ToList();
+            examinationAppointments = examinationAppointments.Where(examination => !addedExaminationIds.Contains(examination.Id)).ToList();
+            NewExaminationControl.LoadAppointmentsWithExaminations(examinationAppointments, patients);
+            NewExaminationControl.Visibility = Visibility.Visible;
+        }
+
+        private void ExaminationResult_Click(object sender, RoutedEventArgs e)
+        {
+            var examinations = medicalSystemsContext.Appointments.Where(appointment => appointment.AppointmentType == VisitType.BADANIE && appointment.PatientId == currentPatient.Id).ToList();
+            var patients = medicalSystemsContext.Patients.ToList().Where(patient => examinations.Any(el => el.PatientId == patient.Id)).ToList();
+            ExaminationResultControl.LoadAppointments(examinations, patients);
+            ExaminationResultControl.Visibility = Visibility.Visible;
+        }
+
     }
 }

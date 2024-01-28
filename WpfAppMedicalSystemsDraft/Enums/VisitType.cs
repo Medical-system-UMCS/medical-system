@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace WpfAppMedicalSystemsDraft.Enums
 {
-    class ParamType
+    class VisitType
     {
-        public const string LOGIN = "login";
-        public const string FULL_NAME = "full_name";
-        public const string DATA = "data";
+        public const string ZWYKLA_WIZYTA = "zwykla_wizyta";
+        public const string BADANIE = "badanie";
     }
 }
