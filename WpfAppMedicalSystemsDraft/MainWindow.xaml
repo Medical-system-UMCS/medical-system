@@ -101,7 +101,7 @@
                 <MenuItem Header="Historia wizyt" Click="AppointmentHistory_Click"/>
                 <MenuItem Header="Wyniki badań" Click="ExaminationResult_Click"/>
             </MenuItem>
-            <MenuItem Header="Zarządzanie badaniami" x:Name="ManageExaminations">
+            <MenuItem Header="Wizyty/Zarządzanie badaniami" x:Name="ManageExaminations">
                 <MenuItem.Style>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
@@ -117,6 +117,7 @@
                         </Style.Triggers>
                     </Style>
                 </MenuItem.Style>
+                <MenuItem Header="Zobacz wizyty" Click="AppointmentList_Click"/>
                 <MenuItem Header="Dodaj wyniki badań" Click="AddExamination_Click"/>
             </MenuItem>
 
@@ -147,6 +148,7 @@
         <controls:ManageUsers x:Name="ManageUsersControl"/>
        
         <controls:DoctorsList x:Name="DoctorsListControl" Visibility="Collapsed"/>
+        <controls:AppointmentList x:Name="AppointmentListControl" Visibility="Collapsed"/>
         <controls:NewAppointment x:Name="NewAppointmentControl" Visibility="Collapsed"/>
         <controls:AddExamination x:Name="NewExaminationControl" Visibility="Collapsed"/>
         <controls:ExaminationResult x:Name="ExaminationResultControl" Visibility="Collapsed"/>
