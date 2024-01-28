@@ -29,7 +29,7 @@ using WpfAppMedicalSystemsDraft.Services;
 using System.Reflection.Metadata;
 using System.Windows.Automation;
 using System.Xml.Linq;
-
+using WpfAppMedicalSystemsDraft.UserControls;
 
 namespace WpfAppMedicalSystemsDraft
 {
@@ -67,7 +67,7 @@ namespace WpfAppMedicalSystemsDraft
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
             LoginControl.OnCloseLogin += LoginControlClose;
             DoctorsListControl.OnCloseWindow += DoctorsListClose;
-
+            AppointmentListControl.OnCloseAppointmentList += AppointmentListClose;
             ApproveDoctorsControl.OnCloseApproveDoctors += ApproveDoctorsClose;
 
             NewAppointmentControl.OnNewAppointmentClose += NewAppointmentClose;
@@ -86,6 +86,11 @@ namespace WpfAppMedicalSystemsDraft
 
             
             
+        }
+
+        private void AppointmentListClose()
+        {
+            AppointmentListControl.Visibility = Visibility.Collapsed;
         }
 
         private void ApproveDoctorsClose(List<Doctor> approvedDoctors)
@@ -196,7 +201,18 @@ namespace WpfAppMedicalSystemsDraft
             NewAppointmentControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
             NewAppointmentControl.Visibility = Visibility.Visible;
         }
+        private void AppointmentList_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentDoctor != null)
+            {
+                var appointments = medicalSystemsContext.Appointments.Where(appointment => appointment.DoctorId == currentDoctor.Id).ToList();
+                var patients = medicalSystemsContext.Patients.ToList();
 
+                AppointmentListControl.LoadAppointments(appointments, patients);
+                AppointmentListControl.Visibility = Visibility.Visible;
+
+            }
+        }
         private void AppointmentHistory_Click(object sender, RoutedEventArgs e)
         {
             if (currentPatient != null)
