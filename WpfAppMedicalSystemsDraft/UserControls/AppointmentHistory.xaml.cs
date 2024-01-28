@@ -43,6 +43,8 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             //MessageBox.Show(first.Doctor.FirstName);
             //MessageBox.Show(first.Doctor.LastName);
 
+            this.appointments.Clear();
+
             foreach (var item in appointments)
             {
                 Doctor doctor = doctors.Where(doctor => doctor.Id == item.DoctorId).First();
