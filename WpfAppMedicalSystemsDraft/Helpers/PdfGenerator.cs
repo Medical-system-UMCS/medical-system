@@ -11,6 +11,7 @@ using iText.Layout;
 using iText.Layout.Element;
 using iText.IO.Font.Constants;
 using WpfAppMedicalSystemsDraft.Models;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace WpfAppMedicalSystemsDraft.Helpers
 {
@@ -22,13 +23,20 @@ namespace WpfAppMedicalSystemsDraft.Helpers
             string dateNoSpaces = date.Replace(" ", "");
             dateNoSpaces = dateNoSpaces.Substring(0, dateNoSpaces.Length - 8);
             string filename = "WynikiBadań_" + dateNoSpaces + ".pdf";
-            string downloadsFolder =  Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "/Downloads/" + filename;
-
+            var folderDialog = new CommonOpenFileDialog();
+            folderDialog.IsFolderPicker = true;
+            CommonFileDialogResult commonOpenFileDialogResult = folderDialog.ShowDialog();
+            if (commonOpenFileDialogResult.Equals(CommonFileDialogResult.Cancel))
+            {
+                return;
+            }            
+            filename = string.Join('/', folderDialog.FileName, filename);
+            MessageBox.Show(filename);
             PdfFont fontArial = PdfFontFactory.CreateFont(@"C:\Windows\Fonts\Arial.ttf");
             PdfFont fontArialBold = PdfFontFactory.CreateFont(@"C:\Windows\Fonts\Arialbd.ttf");
 
 
-            using (PdfWriter writer = new PdfWriter(downloadsFolder))
+            using (PdfWriter writer = new PdfWriter(filename))
             {
                 using (PdfDocument pdf = new PdfDocument(writer))
                 {
