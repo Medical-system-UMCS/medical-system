@@ -10,5 +10,6 @@ namespace WpfAppMedicalSystemsDraft.Enums
     {
         public const string LOGIN = "login";
         public const string FULL_NAME = "full_name";
+        public const string DATA = "data";
     }
 }

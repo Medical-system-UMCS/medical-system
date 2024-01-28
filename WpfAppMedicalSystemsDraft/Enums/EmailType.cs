@@ -11,5 +11,6 @@ namespace WpfAppMedicalSystemsDraft.Enums
         public const string ACCOUNT_CONFIRMATION = "ACCOUNT_CONFIRMATION";
         public const string DOCTOR_REGISTRATION = "DOCTOR_REGISTRATION";
         public const string NEW_APPOINTMENT_CONFIRMATION = "NEW_APPOINTMENT_CONFIRMATION";
+        public const string EXAMINATION_RESULT = "EXAMINATION_RESULT";
     }
 }

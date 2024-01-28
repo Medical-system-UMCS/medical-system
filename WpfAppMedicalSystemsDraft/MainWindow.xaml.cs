@@ -109,6 +109,11 @@ namespace WpfAppMedicalSystemsDraft
         {
             medicalSystemsContext.Examinations.Add(examination);
             medicalSystemsContext.SaveChanges();
+            Appointment appointment = medicalSystemsContext.Appointments.First(appointment => examination.AppointmentId == appointment.Id);
+            Patient patient = medicalSystemsContext.Patients.First(patient => patient.Id == appointment.PatientId);
+            User user = medicalSystemsContext.Users.First(user => user.Id == patient.UserId);
+            string[] paramsValue = { $"Wizyta: {appointment.Date}" };
+            emailService.SendEmail(user.Email, string.Join(' ', patient.FirstName, patient.LastName), EmailType.EXAMINATION_RESULT, paramsValue);
             NewExaminationControl.Visibility = Visibility.Collapsed;
         }
 
@@ -250,28 +255,24 @@ namespace WpfAppMedicalSystemsDraft
                 Appointment appointmentData = medicalSystemsContext.Appointments.First(e => e.Id == id);
                 Doctor doctorData = medicalSystemsContext.Doctors.First(e => e.Id == appointmentData.DoctorId);
                 PdfGenerator pdfGenerator = new PdfGenerator();
-                pdfGenerator.GeneratePdf(currentPatient, doctorData, date, examinationToDownload);
-                
+                pdfGenerator.GeneratePdf(currentPatient, doctorData, date, examinationToDownload);             
             }
         }
 
         private void MakeNewAppointmentOnSubmit(Appointment appointment)
         {
-            if (currentPatient == null)
+            if (currentPatient == null || currentUser == null)
             {
                 return;
             }
             appointment.PatientId = currentPatient.Id;
             medicalSystemsContext.Appointments.Add(appointment);
-            medicalSystemsContext.SaveChanges(); // Exception throw
-
-            //currentUser = ;
-            //currentPatient = ;
+            medicalSystemsContext.SaveChanges(); 
 
             string fullName = string.Join(' ', currentPatient.FirstName, currentPatient.LastName);
             string[] paramsValue = { currentUser.Login, fullName };
             emailService.SendEmail(currentUser.Email, fullName, EmailType.NEW_APPOINTMENT_CONFIRMATION, paramsValue);
-            MessageBox.Show("Czekaj na potwierdzenie od administratora na podany email");
+            MessageBox.Show("Czekaj na potwierdzenie wizyty na podany email");
             NewAppointmentControl.Visibility = Visibility.Collapsed;
 
         }
@@ -397,7 +398,6 @@ namespace WpfAppMedicalSystemsDraft
             MessageBoxResult res = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wyloguj się", MessageBoxButton.YesNo);
             if (res == MessageBoxResult.Yes)
             {
-                // wylogowanie
                 currentUser = null;
                 if(AccountTypeEnum.Equals(AccountType.PACIENT))
                 {

@@ -70,6 +70,23 @@ namespace WpfAppMedicalSystemsDraft.Services
                     { ParamType.FULL_NAME, "" }
                 }
             });
+
+            emailTemplates.Add(EmailType.EXAMINATION_RESULT, new Template
+            {
+                Header = "Wyniki badań",
+                Content = @"<html>
+                            <body>
+                                <p>Dzień dobry!</p>
+                                <p>Został dodany wynik badania{{params.data}}. Możesz zobaczyć go w aplikacji.</p>                                			
+                                <p>Z poważaniem,<br>
+                                Administrator systemu medycznego MFII</p>                
+                            </body>
+                        </html>",
+                Params = new()
+                {
+                    { ParamType.DATA, ""}
+                }
+            });
             // Dodanie kolejnych wzorców
         }
 
