@@ -56,7 +56,7 @@ namespace WpfAppMedicalSystemsDraft
                 return;
             }
 
-           
+
             InitializeComponent();
             RegisterControl.OnRegisterDoctor += RegisterDoctorOnSubmit;
             RegisterControl.OnRegisterPatient += RegisterPacientOnSubmit;
@@ -64,12 +64,10 @@ namespace WpfAppMedicalSystemsDraft
             LoginControl.OnSubmitLogin += LoginControlOnSubmit;
             LoginControl.OnCloseLogin += LoginControlClose;
             DoctorsListControl.OnCloseWindow += DoctorsListClose;
-            medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
-            emailService = new EmailService(settings.SmtpApiKey);          
+            ManageUsersControl.OnCloseWindow += ManageUsersClose;
+            medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
+            emailService = new EmailService(settings.SmtpApiKey);
             DataContext = this;
-
-            
-            
         }
 
 
@@ -133,7 +131,7 @@ namespace WpfAppMedicalSystemsDraft
 
         private void DoctorsList_Click(object sender, RoutedEventArgs e)
         {
-            DoctorsListControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());            
+            DoctorsListControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
             DoctorsListControl.Visibility = Visibility.Visible;
         }
 
@@ -146,19 +144,37 @@ namespace WpfAppMedicalSystemsDraft
         {
             ApproveDoctorsControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
             ApproveDoctorsControl.AddDoctorOverlay.IsOpen = true;
-            
+
         }
 
         private void ManageUsers_Click(object sender, RoutedEventArgs e)
         {
-            if (ManageUsersControl.IsLoaded() == false)
-            {
-                ManageUsersControl.LoadUsers(medicalSystemsContext.Doctors.ToList(), medicalSystemsContext.Patients.ToList(), medicalSystemsContext.Users.ToList());
-            }
-           
+
+            ManageUsersControl.LoadUsers(medicalSystemsContext.Doctors.ToList(), medicalSystemsContext.Patients.ToList(), medicalSystemsContext.Users.ToList());
+
             ManageUsersControl.ManageUsersOverlay.IsOpen = true;
         }
 
+
+        private void ManageUsersClose()
+        {
+            ManageUsersControl.ManageUsersOverlay.IsOpen = false;
+
+            var doctors = ManageUsersControl.GetDoctors();
+            var patients = ManageUsersControl.GetPatients();
+
+            foreach (var doctor in doctors)
+            {
+                medicalSystemsContext.Update(doctor);
+            }
+
+            foreach (var patient in patients)
+            {
+                medicalSystemsContext.Update(patient);
+            }
+
+            medicalSystemsContext.SaveChanges();
+        }
         private void ExitApp_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
@@ -182,13 +198,13 @@ namespace WpfAppMedicalSystemsDraft
             string[] paramsValue = { user.Login, fullName };
             emailService.SendEmail(user.Email, fullName, EmailType.ACCOUNT_CONFIRMATION, paramsValue);
             MessageBox.Show("Czekaj na potwierdzenie od administratora na podany email");
-            RegisterControl.Visibility = Visibility.Collapsed;                      
+            RegisterControl.Visibility = Visibility.Collapsed;
             Appointments.Visibility = Visibility.Visible;
             Doctors.Visibility = Visibility.Visible;
             Register.Visibility = Visibility.Collapsed;
             LogIn.Visibility = Visibility.Collapsed;
             LogOut.Visibility = Visibility.Visible;
-                        
+
         }
 
         private void RegisterDoctorOnSubmit(Doctor doctor, User user)
@@ -229,17 +245,18 @@ namespace WpfAppMedicalSystemsDraft
                 LoginControl.Visibility = Visibility.Hidden;
                 return;
             }
-           
+
             AccountTypeEnum = user.AccountType;
             currentUser = user;
-            LoginControl.Visibility = Visibility.Hidden;           
+            LoginControl.Visibility = Visibility.Hidden;
             if (AccountTypeEnum == AccountType.DOCTOR)
             {
                 currentDoctor = medicalSystemsContext.Doctors.First(doctor => doctor.UserId == currentUser.Id);
             }
-            if (AccountTypeEnum == AccountType.PACIENT) {
-                currentPatient = medicalSystemsContext.Patients.First(patient => patient.UserId == currentUser.Id);                
-            }           
+            if (AccountTypeEnum == AccountType.PACIENT)
+            {
+                currentPatient = medicalSystemsContext.Patients.First(patient => patient.UserId == currentUser.Id);
+            }
             if (AccountTypeEnum.Equals(AccountType.ADMIN))
             {
                 ManageControl.Visibility = Visibility.Visible;
@@ -276,13 +293,13 @@ namespace WpfAppMedicalSystemsDraft
         }
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
-        {                       
+        {
             MessageBoxResult res = MessageBox.Show("Czy na pewno chcesz się wylogować?", "Wyloguj się", MessageBoxButton.YesNo);
             if (res == MessageBoxResult.Yes)
             {
                 // wylogowanie
                 currentUser = null;
-                if(AccountTypeEnum.Equals(AccountType.PACIENT))
+                if (AccountTypeEnum.Equals(AccountType.PACIENT))
                 {
                     currentPatient = null;
                     Appointments.Visibility = Visibility.Collapsed;
@@ -293,7 +310,7 @@ namespace WpfAppMedicalSystemsDraft
                 }
                 if (AccountTypeEnum == AccountType.DOCTOR)
                 {
-                    currentDoctor = null;                    
+                    currentDoctor = null;
                     ManageExaminations.Visibility = Visibility.Collapsed;
                     Doctors.Visibility = Visibility.Collapsed;
                     Register.Visibility = Visibility.Visible;
@@ -308,7 +325,7 @@ namespace WpfAppMedicalSystemsDraft
                     LogOut.Visibility = Visibility.Collapsed;
                 }
                 AccountTypeEnum = AccountType.NOT_LOGGED;
-            }            
+            }
         }
     }
 }

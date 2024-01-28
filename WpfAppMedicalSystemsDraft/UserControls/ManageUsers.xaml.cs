@@ -51,6 +51,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         public void LoadUsers(List<Doctor> doctors, List<Patient> patients, List<User> users)
         {
             Doctors.Clear();
+            Patients.Clear();
 
             foreach (Doctor doctor in doctors)
             {
@@ -71,11 +72,35 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             patientGrid.ItemsSource = Patients;
 
             loaded = true;  
-        }  
+        }
 
+        public event Action OnCloseWindow;
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            ManageUsersOverlay.IsOpen = false;
+            OnCloseWindow.Invoke();
+        }
+        public List<Doctor> GetDoctors()
+        {
+            List<Doctor> result = new();
+
+            foreach (var combined_doctor in this.Doctors)
+            {
+                result.Add(combined_doctor.doctor);
+            }
+
+            return result;
+        }
+
+        public List<Patient> GetPatients()
+        {
+            List<Patient> result = new();
+
+            foreach (var combined_patient in this.Patients)
+            {
+                result.Add(combined_patient.patient);
+            }
+
+            return result;
         }
 
         public new bool IsLoaded()
