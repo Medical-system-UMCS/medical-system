@@ -381,6 +381,11 @@ namespace WpfAppMedicalSystemsDraft
 
             AccountTypeEnum = user.AccountType;
             currentUser = user;
+            if (!user.Verified)
+            {
+                MessageBox.Show("Konto jeszcze nie zostało potwierdzone.");
+                return;
+            }
             LoginControl.Visibility = Visibility.Hidden;
             if (AccountTypeEnum == AccountType.DOCTOR)
             {
