@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="WpfAppMedicalSystemsDraft.UserControls.NewAppointment"
+<UserControl x:Class="WpfAppMedicalSystemsDraft.UserControls.NewAppointment"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -61,7 +61,7 @@
                         </ComboBox>
 
                         <TextBlock x:Name="Time" Text="Godzina:" Grid.Row="3" Grid.Column="1" Margin="50 7 0 0"/>
-                        <ComboBox x:Name="TimePicker" Grid.Row="4" Grid.Column="1" Margin="50 0 0 10" Padding="5">
+                        <ComboBox x:Name="TimePicker" Grid.Row="4" Grid.Column="1" Margin="50 0 0 10" Padding="5"
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">

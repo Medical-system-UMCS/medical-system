@@ -75,7 +75,6 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             
         }
 
-
         public void SubmitAppointment_Click(object sender, RoutedEventArgs e)
         {
             SubmitAppointment();
