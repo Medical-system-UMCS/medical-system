@@ -81,15 +81,10 @@ namespace WpfAppMedicalSystemsDraft
             ExaminationResultControl.OnDownloadExaminationResult += DownloadExaminationResult;
             NewAppointmentHistory.OnCloseAppointmentHistory += CloseAppointmentHistory;
 
-            medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);           
-            emailService = new EmailService(settings.SmtpApiKey);          
+            medicalSystemsContext = new MedicalSystemsContext(settings.ConnectionString);
+            emailService = new EmailService(settings.SmtpApiKey);
 
             DataContext = this;
-        }
-
-        private void AppointmentListClose()
-        {
-            AppointmentListControl.Visibility = Visibility.Collapsed;
         }
 
         private void AppointmentListClose()
@@ -301,7 +296,7 @@ namespace WpfAppMedicalSystemsDraft
                 Appointment appointmentData = medicalSystemsContext.Appointments.First(e => e.Id == id);
                 Doctor doctorData = medicalSystemsContext.Doctors.First(e => e.Id == appointmentData.DoctorId);
                 PdfGenerator pdfGenerator = new PdfGenerator();
-                pdfGenerator.GeneratePdf(currentPatient, doctorData, date, examinationToDownload);             
+                pdfGenerator.GeneratePdf(currentPatient, doctorData, date, examinationToDownload);
             }
         }
 
@@ -473,24 +468,6 @@ namespace WpfAppMedicalSystemsDraft
                 }
                 AccountTypeEnum = AccountType.NOT_LOGGED;
             }
-        }
-
-        private void AddExamination_Click(object sender, RoutedEventArgs e)
-        {
-            var examinationAppointments = medicalSystemsContext.Appointments.Where(appointment => appointment.AppointmentType == VisitType.BADANIE).ToList();
-            var addedExaminationIds = medicalSystemsContext.Examinations.Select(examination => examination.AppointmentId).ToList();
-            var patients = medicalSystemsContext.Patients.ToList().Where(patient => examinationAppointments.Any(el => el.PatientId == patient.Id)).ToList();
-            examinationAppointments = examinationAppointments.Where(examination => !addedExaminationIds.Contains(examination.Id)).ToList();
-            NewExaminationControl.LoadAppointmentsWithExaminations(examinationAppointments, patients);
-            NewExaminationControl.Visibility = Visibility.Visible;
-        }
-
-        private void ExaminationResult_Click(object sender, RoutedEventArgs e)
-        {
-            var examinations = medicalSystemsContext.Appointments.Where(appointment => appointment.AppointmentType == VisitType.BADANIE && appointment.PatientId == currentPatient.Id).ToList();
-            var patients = medicalSystemsContext.Patients.ToList().Where(patient => examinations.Any(el => el.PatientId == patient.Id)).ToList();
-            ExaminationResultControl.LoadAppointments(examinations, patients);
-            ExaminationResultControl.Visibility = Visibility.Visible;
         }
 
         private void AddExamination_Click(object sender, RoutedEventArgs e)
