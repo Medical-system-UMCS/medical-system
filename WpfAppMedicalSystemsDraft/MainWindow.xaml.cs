@@ -250,6 +250,7 @@ namespace WpfAppMedicalSystemsDraft
 
             var doctors = ManageUsersControl.GetDoctors();
             var patients = ManageUsersControl.GetPatients();
+            var userIdsAndValues = ManageUsersControl.GetUserIdsForUpdateVerification();
 
             foreach (var doctor in doctors)
             {
@@ -261,6 +262,13 @@ namespace WpfAppMedicalSystemsDraft
                 medicalSystemsContext.Update(patient);
             }
 
+            foreach (var userIdAndValue in userIdsAndValues)
+            {
+                User user = medicalSystemsContext.Users.First(user => user.Id == userIdAndValue.Item1);
+                user.Verified = userIdAndValue.Item2;
+                medicalSystemsContext.Update(user);
+
+            }
             medicalSystemsContext.SaveChanges();
         }
         private void ExitApp_Click(object sender, RoutedEventArgs e)

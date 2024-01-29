@@ -36,6 +36,8 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             public bool isVerified { get; set; }
         }
 
+
+
         private bool loaded = false;
 
         private List<CombinedDoctor> Doctors;
@@ -98,6 +100,23 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             foreach (var combined_patient in this.Patients)
             {
                 result.Add(combined_patient.patient);
+            }
+
+            return result;
+        }
+
+        public List<(int, bool)> GetUserIdsForUpdateVerification()
+        {
+            List<(int, bool)> result = new();
+
+            foreach(var combinedPatient in Patients)
+            {
+                result.Add((combinedPatient.patient.UserId, combinedPatient.isVerified));
+            }
+
+            foreach(var combinedDoctor in Doctors)
+            {
+                result.Add((combinedDoctor.doctor.UserId, combinedDoctor.isVerified));
             }
 
             return result;
