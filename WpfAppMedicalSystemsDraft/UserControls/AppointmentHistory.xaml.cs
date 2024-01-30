@@ -37,12 +37,6 @@ namespace WpfAppMedicalSystemsDraft.UserControls
 
         public void LoadAppointments(List<Appointment> appointments, List<Doctor> doctors)
         {
-            //appointmentHistoryDataGrid.ItemsSource = appointments;
-            //var first = appointments.First();
-
-            //MessageBox.Show(first.Doctor.FirstName);
-            //MessageBox.Show(first.Doctor.LastName);
-
             this.appointments.Clear();
 
             foreach (var item in appointments)

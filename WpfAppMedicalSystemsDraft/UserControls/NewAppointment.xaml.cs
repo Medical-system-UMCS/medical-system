@@ -133,7 +133,6 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             {
                 OnNewAppointmentClose.Invoke();
             }
-        }
-
+        }       
     }
 }

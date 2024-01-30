@@ -120,11 +120,6 @@ namespace WpfAppMedicalSystemsDraft.UserControls
             }
 
             return result;
-        }
-
-        public new bool IsLoaded()
-        {
-            return loaded;
-        }
+        }       
     }
 }

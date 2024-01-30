@@ -63,6 +63,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                 MessageBox.Show("Wprowadź leczenie!");
                 return;
             }
+
             Examination examination = new Examination
             {
                 Symptoms = Symptoms.Text.Trim(),

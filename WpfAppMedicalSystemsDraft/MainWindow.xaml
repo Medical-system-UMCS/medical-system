@@ -153,5 +153,6 @@
         <controls:AddExamination x:Name="NewExaminationControl" Visibility="Collapsed"/>
         <controls:ExaminationResult x:Name="ExaminationResultControl" Visibility="Collapsed"/>
         <controls:AppointmentHistory x:Name="NewAppointmentHistory" Visibility="Collapsed"/>
+        <Image HorizontalAlignment="Left" Height="100" Margin="666,346,0,0" VerticalAlignment="Top" Width="100" Source="/_49bdeba3-250c-45fd-a0cd-4f88d7e5686c.jpg"/>
     </Grid>
 </Window>

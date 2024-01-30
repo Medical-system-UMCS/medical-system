@@ -113,7 +113,6 @@ namespace WpfAppMedicalSystemsDraft
         private void AddNewExamination(Examination examination)
         {
             medicalSystemsContext.Examinations.Add(examination);
-            MessageBox.Show(examination.AppointmentId.ToString());
             medicalSystemsContext.SaveChanges();
             Appointment appointment = medicalSystemsContext.Appointments.First(appointment => examination.AppointmentId == appointment.Id);
             Patient patient = medicalSystemsContext.Patients.First(patient => patient.Id == appointment.PatientId);
@@ -131,12 +130,7 @@ namespace WpfAppMedicalSystemsDraft
         private void CloseAppointmentHistory()
         {
             NewAppointmentHistory.Visibility = Visibility.Collapsed;
-        }
-        private void UserControlUsers_CloseClicked(object sender, EventArgs e)
-        {
-            // Handle the close logic here
-            Close();
-        }
+        }      
 
         private static AppSettings? ReadSettings()
         {
@@ -198,7 +192,6 @@ namespace WpfAppMedicalSystemsDraft
 
         private void AddAppointment_Click(object sender, RoutedEventArgs e)
         {
-            //NewAppointmentControl.Prepare();
             NewAppointmentControl.LoadDoctors(medicalSystemsContext.Doctors.ToList());
             NewAppointmentControl.LoadDateTime(medicalSystemsContext.Appointments.ToList());
             NewAppointmentControl.Visibility = Visibility.Visible;
@@ -237,7 +230,6 @@ namespace WpfAppMedicalSystemsDraft
 
         private void ManageUsers_Click(object sender, RoutedEventArgs e)
         {
-
             ManageUsersControl.LoadUsers(medicalSystemsContext.Doctors.ToList(), medicalSystemsContext.Patients.ToList(), medicalSystemsContext.Users.ToList());
 
             ManageUsersControl.ManageUsersOverlay.IsOpen = true;
@@ -266,10 +258,30 @@ namespace WpfAppMedicalSystemsDraft
             {
                 User user = medicalSystemsContext.Users.First(user => user.Id == userIdAndValue.Item1);
                 user.Verified = userIdAndValue.Item2;
+                if (user.Verified)
+                {
+                    string fullName = GetFullName(user);
+                    string[] paramsValue = { user.Login, fullName };
+                    emailService.SendEmail(user.Email, fullName, EmailType.ACCOUNT_CONFIRMATION, paramsValue);
+                }
                 medicalSystemsContext.Update(user);
 
             }
             medicalSystemsContext.SaveChanges();
+        }
+
+        private string GetFullName(User user)
+        {
+            if (user.AccountType == AccountType.PACIENT)
+            {
+                Patient patient = medicalSystemsContext.Patients.First(patient => patient.UserId == user.Id);
+                return string.Join(' ', patient.FirstName, patient.LastName);
+            }
+            else
+            {
+                Doctor doctor = medicalSystemsContext.Doctors.First(doctor => doctor.UserId == user.Id);
+                return string.Join(' ', doctor.FirstName, doctor.LastName);
+            }
         }
         private void ExitApp_Click(object sender, RoutedEventArgs e)
         {
