@@ -21,7 +21,7 @@ namespace WpfAppMedicalSystemsDraft.Helpers
         {
 
             string dateNoSpaces = date.Replace(" ", "");
-            dateNoSpaces = dateNoSpaces.Substring(0, dateNoSpaces.Length - 8);
+            dateNoSpaces = dateNoSpaces.Substring(0, dateNoSpaces.Length - 7);
             string filename = "WynikiBadań_" + dateNoSpaces + ".pdf";
             var folderDialog = new CommonOpenFileDialog();
             folderDialog.IsFolderPicker = true;

@@ -113,11 +113,12 @@ namespace WpfAppMedicalSystemsDraft
         private void AddNewExamination(Examination examination)
         {
             medicalSystemsContext.Examinations.Add(examination);
+            MessageBox.Show(examination.AppointmentId.ToString());
             medicalSystemsContext.SaveChanges();
             Appointment appointment = medicalSystemsContext.Appointments.First(appointment => examination.AppointmentId == appointment.Id);
             Patient patient = medicalSystemsContext.Patients.First(patient => patient.Id == appointment.PatientId);
             User user = medicalSystemsContext.Users.First(user => user.Id == patient.UserId);
-            string[] paramsValue = { $"Wizyta: {appointment.Date}" };
+            string[] paramsValue = {appointment.Date.ToString()};
             emailService.SendEmail(user.Email, string.Join(' ', patient.FirstName, patient.LastName), EmailType.EXAMINATION_RESULT, paramsValue);
             NewExaminationControl.Visibility = Visibility.Collapsed;
         }
@@ -309,10 +310,16 @@ namespace WpfAppMedicalSystemsDraft
             appointment.PatientId = currentPatient.Id;
             medicalSystemsContext.Appointments.Add(appointment);
             medicalSystemsContext.SaveChanges();
+            Doctor doctor = medicalSystemsContext.Doctors.First(doctor => doctor.Id == appointment.DoctorId);
 
             string fullName = string.Join(' ', currentPatient.FirstName, currentPatient.LastName);
-            string[] paramsValue = { currentUser.Login, fullName };
+            string doctorName = string.Join(' ', doctor.FirstName, doctor.LastName);
+            string doctorEmail = medicalSystemsContext.Users.First(user => user.Id == doctor.UserId).Email;
+            string[] paramsValue = { appointment.Date.ToString(), doctorName, appointment.ExaminRoom };
             emailService.SendEmail(currentUser.Email, fullName, EmailType.NEW_APPOINTMENT_CONFIRMATION, paramsValue);
+            string[] paramsValueDoctor = { appointment.Date.ToString(), fullName, appointment.ExaminRoom};
+            emailService.SendEmail(doctorEmail, doctorName, EmailType.NEW_APPOINTMENT_DOCTOR, paramsValueDoctor);
+
             MessageBox.Show("Czekaj na potwierdzenie wizyty na podany email");
             NewAppointmentControl.Visibility = Visibility.Collapsed;
 

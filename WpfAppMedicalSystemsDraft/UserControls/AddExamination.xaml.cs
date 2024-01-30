@@ -43,7 +43,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
         
         private void SubmitExamination()
         {
-            if (ExaminationsList.SelectedIndex == -1)
+            if (ExaminationsList.SelectedIndex == -1 || ExaminationsList.SelectedItem.ToString() == null)
             {
                 MessageBox.Show("Wybierz wizytę!");
                 return;
@@ -68,7 +68,7 @@ namespace WpfAppMedicalSystemsDraft.UserControls
                 Symptoms = Symptoms.Text.Trim(),
                 Diagnosis = Diagnosis.Text.Trim(),
                 Treatment = Treatment.Text.Trim(),
-                AppointmentId = int.Parse(ExaminationsList.Text.Trim().First().ToString()),
+                AppointmentId = int.Parse(ExaminationsList.SelectedItem.ToString().Split(' ')[0])
             };
             OnSubmitExamination.Invoke(examination);
         }

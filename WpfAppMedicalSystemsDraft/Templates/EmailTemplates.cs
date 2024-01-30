@@ -58,16 +58,16 @@ namespace WpfAppMedicalSystemsDraft.Services
                 Content = @"<html>
                             <body>
                                 <p>Dzień dobry!</p>
-                                <p>Umówiona wizyta została potwierdzona.</p>
-                                <p>(tutaj dane wizyty)</p>
+                                <p>Umówiona wizyta została potwierdzona. Data i czas: {{params.data}}, lekarz: {{params.doctor_name}}, gabinet: {{params.examin_room}}.</p>                                
                                 <p>Z poważaniem,<br>
                                 Administrator systemu medycznego MFII</p>                
                             </body>
                         </html>",
                 Params = new()
-                {
-                    { ParamType.LOGIN, "" },
-                    { ParamType.FULL_NAME, "" }
+                {                    
+                    { ParamType.DATA, "" },
+                    { ParamType.DOCTOR_NAME, "" },
+                    { ParamType.EXAMIN_ROOM, "" }
                 }
             });
 
@@ -77,7 +77,7 @@ namespace WpfAppMedicalSystemsDraft.Services
                 Content = @"<html>
                             <body>
                                 <p>Dzień dobry!</p>
-                                <p>Został dodany wynik badania{{params.data}}. Możesz zobaczyć go w aplikacji.</p>                                			
+                                <p>Został dodany wynik badania {{params.data}}. Możesz zobaczyć go w aplikacji.</p>                                			
                                 <p>Z poważaniem,<br>
                                 Administrator systemu medycznego MFII</p>                
                             </body>
@@ -85,6 +85,25 @@ namespace WpfAppMedicalSystemsDraft.Services
                 Params = new()
                 {
                     { ParamType.DATA, ""}
+                }
+            });
+
+            emailTemplates.Add(EmailType.NEW_APPOINTMENT_DOCTOR, new Template
+            {
+                Header = "Nowa wizyta",
+                Content = @"<html>
+                            <body>
+                                <p>Dzień dobry!</p>
+                                <p>Nowa wizyta została umówiona. Data i czas: {{params.data}}, pacjent: {{params.patient_name}}, gabinet: {{params.examin_room}}.</p>                                
+                                <p>Z poważaniem,<br>
+                                Administrator systemu medycznego MFII</p>                
+                            </body>
+                        </html>",
+                Params = new()
+                {
+                    { ParamType.DATA, "" },
+                    { ParamType.PATIENT_NAME, "" },
+                    { ParamType.EXAMIN_ROOM, "" }
                 }
             });
             // Dodanie kolejnych wzorców
